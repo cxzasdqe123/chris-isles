@@ -349,6 +349,119 @@ body.online .ctx{top:66px}
 .nameplate.avatar.me{background:#db6a41;color:#fff8f4}
 .fest{margin-top:8px;display:inline-block;padding:4px 10px;border-radius:999px;background:#3a1f5a;color:#fcea8b;font-size:12px;font-weight:800;margin-left:6px}
 .fest[hidden]{display:none}
+/* 魔法時鐘 */
+.mclock{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:6;display:flex;align-items:center;gap:10px;
+  padding:6px 18px 6px 6px;border-radius:999px;background:linear-gradient(135deg,rgba(43,49,112,.92),rgba(75,42,107,.9));
+  box-shadow:0 10px 30px rgba(43,49,112,.35),inset 0 0 0 1px rgba(226,181,74,.55);color:#fff8f4}
+.mclock .dial{width:72px;height:72px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;flex:none;transition:transform .2s}
+.mclock .dial:hover{transform:scale(1.06)}
+.mclock .dial:focus-visible{outline:3px solid #fcea8b;outline-offset:2px}
+.mclock .dial svg{width:100%;height:100%;display:block;overflow:visible}
+.mclock .runes{transform-origin:42px 42px;animation:runespin 40s linear infinite}
+@keyframes runespin{to{transform:rotate(360deg)}}
+#dialRot{transition:transform .8s}
+.mread{display:flex;flex-direction:column;line-height:1.15;min-width:96px}
+.mread .t{font:italic 700 26px Georgia,"Times New Roman",serif;color:#fcea8b;letter-spacing:.5px;font-variant-numeric:tabular-nums;text-shadow:0 0 12px rgba(252,234,139,.45)}
+.mread .p{font:700 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:2px;color:#e8dcff;margin-top:2px}
+.mread .ev{font-size:11.5px;color:#fff8f4;opacity:.85;margin-top:3px;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mpop{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);display:flex;gap:6px;padding:8px;border-radius:18px;
+  background:rgba(43,49,112,.95);box-shadow:0 14px 34px rgba(33,29,29,.3),inset 0 0 0 1px rgba(226,181,74,.5)}
+.mpop[hidden]{display:none}
+.mpop .tbtn{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:58px;min-height:54px;padding:6px 8px;border:0;border-radius:12px;background:rgba(255,248,244,.08);
+  color:#fff8f4;font:700 12px "Noto Sans TC","PingFang TC",sans-serif;cursor:pointer}
+.mpop .tbtn .i{color:#fcea8b;display:grid}
+.mpop .tbtn:hover{background:rgba(252,234,139,.22)}
+.mpop .tbtn[aria-pressed="true"]{background:#fcea8b;color:#2b3170}
+.mpop .tbtn[aria-pressed="true"] .i{color:#2b3170}
+.mpop .tbtn:focus-visible{outline:3px solid #fcea8b}
+.ctx{top:104px}
+/* 底部導覽 */
+.dock{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:8;display:flex;align-items:center;gap:4px;padding:6px;border-radius:22px;
+  background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glass-line);box-shadow:var(--shadow)}
+.dock .dk{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:70px;min-height:56px;padding:6px 4px;border:0;border-radius:16px;
+  background:transparent;color:var(--text);font:700 11.5px "Noto Sans TC","PingFang TC",sans-serif;cursor:pointer;transition:background .15s,transform .15s}
+.dock .dk .i{display:grid;place-items:center;width:34px;height:26px;border-radius:999px;color:#db6a41;transition:background .15s}
+.dock .dk:hover{background:rgba(252,234,139,.35)}
+.dock .dk:hover .i{background:#fcea8b}
+.dock .dk:active{transform:translateY(1px)}
+.dock .dk:focus-visible{outline:3px solid #db6a41;outline-offset:1px}
+.dock .dk[aria-expanded="true"]{background:#211d1d;color:#fff8f4}
+.dock .dk[aria-expanded="true"] .i{color:#fcea8b;background:transparent}
+.dock .dsep{width:1px;align-self:stretch;margin:8px 2px;background:var(--line)}
+.layers{position:relative}
+.lpop{position:absolute;bottom:calc(100% + 10px);right:-6px;width:230px;padding:8px;border-radius:18px;background:var(--panel);backdrop-filter:blur(18px);
+  box-shadow:0 18px 40px rgba(33,29,29,.2),inset 0 0 0 1px var(--glass-line);display:grid;gap:2px}
+.lpop[hidden]{display:none}
+.lpop .lhead{font:700 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:2px;color:#db6a41;padding:4px 8px 6px}
+.lrow{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 8px;border:0;border-radius:12px;background:transparent;color:var(--text);font:600 14px "Noto Sans TC",sans-serif;cursor:pointer;text-align:left}
+.lrow .i{color:#db6a41;display:grid}
+.lrow .lt{flex:1}
+.lrow:hover{background:rgba(252,234,139,.35)}
+.lrow:focus-visible{outline:3px solid #db6a41}
+.lrow .sw{width:36px;height:20px;border-radius:999px;background:var(--line);position:relative;transition:background .2s;flex:none}
+.lrow .sw::after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s}
+.lrow[aria-pressed="true"] .sw{background:#db6a41}
+.lrow[aria-pressed="true"] .sw::after{left:18px}
+.legend{bottom:96px}
+.online{left:16px!important;top:auto!important;bottom:18px;transform:none!important}
+body.photo .mclock,body.photo .dock{display:none!important}
+@media (max-width:1100px){ .mread .ev{display:none} }
+@media (max-width:800px){
+  .brand{display:none}
+  .mclock{left:10px;top:10px;transform:none;padding:4px 14px 4px 4px;gap:8px}
+  .mclock .dial{width:56px;height:56px}
+  .mread{min-width:0}
+  .mread .t{font-size:21px}
+  .mpop{left:0;transform:none}
+  .ctx{top:78px;max-width:calc(100% - 20px)}
+  .dock{bottom:10px;padding:4px;gap:2px;max-width:calc(100% - 16px)}
+  .dock .dk{width:60px;min-height:52px;font-size:11px}
+  .lpop{right:0}
+  .legend{bottom:84px}
+  body.online .online{bottom:80px!important;left:10px!important;right:10px}
+}
+@media (prefers-reduced-motion:reduce){ .mclock .runes{animation:none} #dialRot{transition:none} }
+/* 手機版：底部導覽列與「更多」面板 */
+.m-only{display:none!important}
+.msheet{position:absolute;inset:0;z-index:28;background:rgba(33,29,29,.3);display:flex;align-items:flex-end}
+.msheet[hidden]{display:none}
+.msheet-card{width:100%;padding:10px 16px calc(84px + env(safe-area-inset-bottom,0px));border-radius:24px 24px 0 0;background:var(--panel);backdrop-filter:blur(18px);
+  box-shadow:0 -20px 50px rgba(33,29,29,.25);animation:sheetin .26s ease-out;touch-action:none}
+.grab2{width:44px;height:5px;border-radius:9px;background:rgba(120,90,70,.35);margin:2px auto 10px}
+.mhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+.mhead .eyebrow{font:700 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:2px;color:#db6a41}
+.mhead h2{margin:2px 0 0;font-size:20px;font-weight:900}
+.mhead .x{min-width:40px;min-height:40px}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.mtile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:78px;padding:10px 6px;border:0;border-radius:16px;
+  background:var(--btn);color:var(--text);font:700 12.5px "Noto Sans TC","PingFang TC",sans-serif;box-shadow:inset 0 0 0 1px var(--line);cursor:pointer}
+.mtile .i{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:rgba(219,106,65,.14);color:#db6a41}
+.mtile:active{transform:scale(.97)}
+.mtile[hidden]{display:none}
+.mtoggles{display:grid;gap:2px;padding:6px;border-radius:16px;background:var(--btn);box-shadow:inset 0 0 0 1px var(--line)}
+.mtoggles .lhead{font:700 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:2px;color:#db6a41;padding:6px 8px 4px}
+@media (max-width:800px){
+  .m-only{display:flex!important}
+  .d-only{display:none!important}
+  .tools{display:none}
+  .dock{z-index:29}
+  .dock{left:0;right:0;bottom:0;transform:none;max-width:none;width:100%;justify-content:space-around;gap:0;border-radius:20px 20px 0 0;
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));border-left:0;border-right:0;border-bottom:0}
+  .dock .dk{flex:1;width:auto;min-height:56px;font-size:11px;border-radius:14px}
+  .dock .dk .i{width:44px;height:28px}
+  .dock .dk[aria-pressed="true"],.dock .dk[aria-expanded="true"]{background:transparent;color:#db6a41}
+  .dock .dk[aria-pressed="true"] .i,.dock .dk[aria-expanded="true"] .i{background:#211d1d;color:#fcea8b}
+  .side,.card,.keeper{bottom:70px;left:8px;right:8px}
+  .card{height:44vh}
+  .side{height:56vh}
+  .hint{bottom:auto;top:122px;max-width:calc(100% - 24px);text-align:center}
+  .legend{bottom:76px}
+  .photo-exit{bottom:18px}
+  body.online .online{bottom:76px!important}
+  body.online .side,body.online .card,body.online .keeper{bottom:120px}
+  .isl-label{font-size:12px;padding:4px 10px 4px 5px}
+  .mclock{top:8px;left:8px}
+}
 /* 名牌 */
 .nameplate{pointer-events:none;white-space:nowrap;font:700 11px "Noto Sans TC","PingFang TC",sans-serif;padding:3px 8px;border-radius:999px;
   background:#fff8f4;color:#211d1d;box-shadow:0 2px 8px rgba(74,42,20,.18);transform:translateY(-6px)}
@@ -530,25 +643,87 @@ body.photo .legend,body.photo .hint,body.photo .labels,body.photo .online{displa
   <button class="photo-exit" id="photoExit"><span data-en="Exit photo mode (Esc)">離開拍照模式（Esc）</span></button>
   <div class="hint" id="hint" data-en="Tap the sea or press Esc to see all islands">點一下海面或按 Esc 回到全景</div>
 
-  <div class="hud" role="toolbar" aria-label="時間">
-    <div class="clock"><span class="t" id="clockTime">10:00</span><span class="p" id="clockPhase">上午</span></div>
-    <button class="btn mob" id="btnTime" aria-expanded="false"><span class="i" data-icon="clock"></span><span data-en="Time">時間</span></button>
-    <div class="sep opt"></div>
-    <button class="btn opt" data-min="360"><span class="i" data-icon="sunrise"></span><span data-en="Dawn">清晨</span></button>
-    <button class="btn opt" data-min="720"><span class="i" data-icon="sun"></span><span data-en="Day">白天</span></button>
-    <button class="btn opt" data-min="1080"><span class="i" data-icon="sunset"></span><span data-en="Dusk">黃昏</span></button>
-    <button class="btn opt" data-min="1260"><span class="i" data-icon="moon"></span><span data-en="Night">夜晚</span></button>
-    <div class="sep opt"></div>
-    <button class="btn opt" id="btnPause" aria-pressed="false"><span class="i" data-icon="pause"></span><span data-en="Pause">暫停</span></button>
-    <div class="sep"></div>
-    <button class="btn opt" id="btnNames" aria-pressed="false"><span class="i" data-icon="tag"></span><span data-en="Names">名牌</span></button>
-    <button class="btn opt" id="btnBadges" aria-pressed="true"><span class="i" data-icon="box"></span><span data-en="Cargo">搬運</span></button>
-    <button class="btn" id="btnWish"><span class="i" data-icon="lantern"></span><span data-en="Wish">放燈籠</span></button>
-    <button class="btn" id="btnBook"><span class="i" data-icon="star"></span><span data-en="Shards">收集冊</span></button>
-    <button class="btn" id="btnAvatar"><span class="i" data-icon="user"></span><span data-en="Join">成為島民</span></button>
-    <button class="btn" id="btnKeeper"><span class="i" data-icon="camera"></span><span data-en="Chris">島主</span></button>
-    <button class="btn" id="btnLines" aria-pressed="false"><span class="i" data-icon="route"></span><span data-en="Routes">協作線</span></button>
-    <button class="btn" id="btnLog" aria-pressed="true"><span class="i" data-icon="log"></span><span data-en="Log">日誌</span></button>
+  <!-- 魔法時鐘：太陽與月亮隨時間繞著錶盤轉，天空顏色跟著變 -->
+  <div class="mclock" id="mclock">
+    <button class="dial" id="dialBtn" aria-expanded="false" aria-controls="mpop" aria-label="魔法時鐘，點一下切換時間" data-en-label="Magic clock, tap to change the time">
+      <svg viewBox="0 0 84 84" aria-hidden="true">
+        <defs>
+          <radialGradient id="dGlow" cx="50%" cy="50%" r="50%"><stop offset="66%" stop-color="#fcea8b" stop-opacity="0"/><stop offset="100%" stop-color="#fcea8b" stop-opacity=".5"/></radialGradient>
+          <clipPath id="dClip"><circle cx="42" cy="42" r="28.5"/></clipPath>
+        </defs>
+        <circle cx="42" cy="42" r="41" fill="url(#dGlow)"/>
+        <g class="runes"><circle cx="42" cy="42" r="38" fill="none" stroke="#e2b54a" stroke-width=".8" stroke-dasharray="1.2 4.2" opacity=".85"/></g>
+        <circle cx="42" cy="42" r="34" fill="#2b3170" stroke="#e2b54a" stroke-width="2.6"/>
+        <rect x="41.2" y="9" width="1.6" height="4" rx=".8" fill="#e2b54a" transform="rotate(0 42 42)"/><rect x="41.2" y="9" width="1.6" height="2.4" rx=".8" fill="#e2b54a" transform="rotate(30 42 42)"/><rect x="41.2" y="9" width="1.6" height="2.4" rx=".8" fill="#e2b54a" transform="rotate(60 42 42)"/><rect x="41.2" y="9" width="1.6" height="4" rx=".8" fill="#e2b54a" transform="rotate(90 42 42)"/><rect x="41.2" y="9" width="1.6" height="2.4" rx=".8" fill="#e2b54a" transform="rotate(120 42 42)"/><rect x="41.2" y="9" width="1.6" height="2.4" rx=".8" fill="#e2b54a" transform="rotate(150 42 42)"/><rect x="41.2" y="9" width="1.6" height="4" rx=".8" fill="#e2b54a" transform="rotate(180 42 42)"/><rect x="41.2" y="9" width="1.6" height="2.4" rx=".8" fill="#e2b54a" transform="rotate(210 42 42)"/><rect x="41.2" y="9" width="1.6" height="2.4" rx=".8" fill="#e2b54a" transform="rotate(240 42 42)"/><rect x="41.2" y="9" width="1.6" height="4" rx=".8" fill="#e2b54a" transform="rotate(270 42 42)"/><rect x="41.2" y="9" width="1.6" height="2.4" rx=".8" fill="#e2b54a" transform="rotate(300 42 42)"/><rect x="41.2" y="9" width="1.6" height="2.4" rx=".8" fill="#e2b54a" transform="rotate(330 42 42)"/>
+        <circle id="dialSky" cx="42" cy="42" r="28.5" fill="#9fd0ec"/>
+        <g clip-path="url(#dClip)">
+          <g id="dialRot">
+            <circle cx="42" cy="22" r="6.4" fill="#ffd27a"/><circle cx="42" cy="22" r="9" fill="#ffd27a" opacity=".25"/>
+            <path d="M47.5 61a7 7 0 1 1-6-10.5 5.4 5.4 0 0 0 6 10.5z" fill="#fff3c4"/>
+            <circle cx="33" cy="58" r=".9" fill="#fff"/><circle cx="52" cy="66" r=".7" fill="#fff"/><circle cx="36" cy="68" r=".6" fill="#fff"/>
+          </g>
+          <rect x="13" y="47" width="58" height="26" fill="#2b3170" opacity=".28"/>
+        </g>
+        <circle cx="42" cy="42" r="28.5" fill="none" stroke="#1d2150" stroke-width="1.2"/>
+        <path d="M42 6.5l1.6 3.4 3.6.5-2.6 2.5.6 3.6L42 14.8l-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z" fill="#fcea8b" stroke="#a37a1e" stroke-width=".5"/>
+      </svg>
+    </button>
+    <div class="mread">
+      <span class="t" id="clockTime">10:00</span>
+      <span class="p" id="clockPhase">上午</span>
+      <span class="ev" id="clockEv"></span>
+    </div>
+    <div class="mpop" id="mpop" hidden>
+      <button class="tbtn" data-min="360"><span class="i" data-icon="sunrise"></span><span data-en="Dawn">清晨</span></button>
+      <button class="tbtn" data-min="720"><span class="i" data-icon="sun"></span><span data-en="Day">白天</span></button>
+      <button class="tbtn" data-min="1080"><span class="i" data-icon="sunset"></span><span data-en="Dusk">黃昏</span></button>
+      <button class="tbtn" data-min="1260"><span class="i" data-icon="moon"></span><span data-en="Night">夜晚</span></button>
+      <button class="tbtn" id="btnPause" aria-pressed="false"><span class="i" data-icon="pause"></span><span data-en="Pause">暫停</span></button>
+    </div>
+  </div>
+
+  <!-- 底部導覽：只留最常用的功能，顯示開關收進「顯示」 -->
+  <nav class="dock" aria-label="主要功能">
+    <button class="dk m-only" id="mHome"><span class="i" data-icon="home"></span><span data-en="Map">全景</span></button>
+    <button class="dk m-only" id="mList" aria-pressed="false"><span class="i" data-icon="list"></span><span data-en="List">清單</span></button>
+    <button class="dk" id="btnKeeper"><span class="i" data-icon="camera"></span><span data-en="Chris">島主</span></button>
+    <button class="dk" id="btnBook"><span class="i" data-icon="star"></span><span data-en="Shards">收集冊</span></button>
+    <button class="dk d-only" id="btnAvatar"><span class="i" data-icon="user"></span><span data-en="Join">成為島民</span></button>
+    <button class="dk" id="btnWish"><span class="i" data-icon="lantern"></span><span data-en="Wish">放燈籠</span></button>
+    <button class="dk m-only" id="mMore" aria-expanded="false" aria-controls="moreSheet"><span class="i" data-icon="more"></span><span data-en="More">更多</span></button>
+    <span class="dsep d-only" aria-hidden="true"></span>
+    <div class="layers d-only">
+      <button class="dk" id="btnLayers" aria-expanded="false" aria-controls="lpop"><span class="i" data-icon="layers"></span><span data-en="Show">顯示</span></button>
+      <div class="lpop" id="lpop" hidden>
+        <div class="lhead" data-en="Show on the map">地圖上要顯示</div>
+        <button class="lrow" id="btnLines" aria-pressed="false"><span class="i" data-icon="route"></span><span class="lt" data-en="Delivery routes">協作線</span><span class="sw"></span></button>
+        <button class="lrow" id="btnNames" aria-pressed="false"><span class="i" data-icon="tag"></span><span class="lt" data-en="Name tags">居民名牌</span><span class="sw"></span></button>
+        <button class="lrow" id="btnBadges" aria-pressed="true"><span class="i" data-icon="box"></span><span class="lt" data-en="Cargo icons">搬運圖示</span><span class="sw"></span></button>
+      </div>
+    </div>
+  </nav>
+  <button id="btnLog" hidden></button><button id="btnTime" hidden></button>
+
+  <!-- 手機版「更多」面板 -->
+  <div class="msheet" id="moreSheet" hidden role="dialog" aria-modal="true" aria-labelledby="moreTitle">
+    <div class="msheet-card">
+      <div class="grab2" aria-hidden="true"></div>
+      <div class="mhead"><div><div class="eyebrow">LANTERNFALL ISLES</div><h2 id="moreTitle" data-en="Chris’s Lanternfall Isles">Chris 的星燈群島</h2></div>
+        <button class="btn x" data-close aria-label="關閉"><span class="i" data-icon="close"></span></button></div>
+      <div class="mgrid">
+        <button class="mtile" data-proxy="btnAvatar"><span class="i" data-icon="user"></span><span data-en="Join the isles">成為島民</span></button>
+        <button class="mtile wish-only" data-proxy="btnWish"><span class="i" data-icon="lantern"></span><span data-en="Wish lantern">放燈籠</span></button>
+        <button class="mtile" data-proxy="btnWeather"><span class="i" data-icon="cloud"></span><span data-en="Weather">換天氣</span></button>
+        <button class="mtile" data-proxy="btnPhoto"><span class="i" data-icon="frame"></span><span data-en="Photo mode">拍照模式</span></button>
+        <button class="mtile" data-proxy="btnHelp"><span class="i" data-icon="help"></span><span data-en="How to play">操作說明</span></button>
+      </div>
+      <div class="mtoggles">
+        <div class="lhead" data-en="Show on the map">地圖上要顯示</div>
+        <button class="lrow" data-proxy="btnLines"><span class="i" data-icon="route"></span><span class="lt" data-en="Delivery routes">協作線</span><span class="sw"></span></button>
+        <button class="lrow" data-proxy="btnNames"><span class="i" data-icon="tag"></span><span class="lt" data-en="Name tags">居民名牌</span><span class="sw"></span></button>
+        <button class="lrow" data-proxy="btnBadges"><span class="i" data-icon="box"></span><span class="lt" data-en="Cargo icons">搬運圖示</span><span class="sw"></span></button>
+      </div>
+    </div>
   </div>
 
   <div class="legend" id="legend" hidden>
@@ -805,6 +980,8 @@ const ICONS = {
   cloud:'<path d="M4.5 12.5h7a2.8 2.8 0 0 0 .3-5.6A4 4 0 0 0 4 6.2a3.2 3.2 0 0 0 .5 6.3z"/>',
   music:'<path d="M6 12.5V3.5l7-1.5v9"/><circle cx="4.2" cy="12.5" r="1.8"/><circle cx="11.2" cy="11" r="1.8"/>',
   user:'<circle cx="8" cy="5.5" r="2.6"/><path d="M3 14c.6-2.8 2.6-4.3 5-4.3s4.4 1.5 5 4.3"/>',
+  more:'<circle cx="3.5" cy="8" r="1.3"/><circle cx="8" cy="8" r="1.3"/><circle cx="12.5" cy="8" r="1.3"/>',
+  layers:'<path d="M8 2.5 14 5.5 8 8.5 2 5.5zM2 8.3l6 3 6-3M2 11l6 3 6-3"/>',
   frame:'<path d="M2 5V2.5h2.5M11.5 2.5H14V5M14 11v2.5h-2.5M4.5 13.5H2V11"/><circle cx="8" cy="8" r="2.2"/>',
   help:'<circle cx="8" cy="8" r="6"/><path d="M6.3 6.3a1.8 1.8 0 1 1 2.4 1.7c-.5.2-.7.6-.7 1.1M8 11.2h.01"/>',
   clock:'<circle cx="8" cy="8" r="6"/><path d="M8 4.8V8l2.2 1.4"/>',
@@ -834,6 +1011,7 @@ if (LANG === 'en'){
   document.documentElement.lang = 'en';
   document.querySelectorAll('[data-en]').forEach(el => el.textContent = el.dataset.en);
   document.querySelectorAll('[data-en-ph]').forEach(el => el.placeholder = el.dataset.enPh);
+  document.querySelectorAll('[data-en-label]').forEach(el => el.setAttribute('aria-label', el.dataset.enLabel));
   document.title = 'Chris’s Lanternfall Isles';
 }
 
@@ -4571,6 +4749,7 @@ function updateDay(m){
   new Set([...old, ...dayItems]).forEach(paintItem);
   const chip = $('nowChip');
   if (chip) chip.innerHTML = `<span class="dot"></span>${tr('此刻', 'Now')}：<b>${esc(tr(cur.label, cur.en))}</b>`;
+  const ce = $('clockEv'); if (ce) ce.textContent = tr(cur.label, cur.en);
 }
 
 // ---------- 細項編號 pin ----------
@@ -4619,7 +4798,7 @@ function openCard(kind, ref, html, reopen){
   cardEl.hidden = false; cardEl.scrollTop = 0;
   keeperEl.hidden = true;
   $('cardBack').hidden = !cardHist.length;
-  if (isMobile) setSide(false);
+  if (isMobile){ setSide(false); const ms = document.getElementById('moreSheet'); if (ms && !ms.hidden){ ms.hidden = true; document.getElementById('mMore').setAttribute('aria-expanded', 'false'); } }
 }
 function closeCard(){
   cardEl.hidden = true; cardKind = null; cardRef = null; cardHist = []; curReopen = null;
@@ -4756,6 +4935,10 @@ function focus(target, offset, shift){
     const right = new THREE.Vector3(offset.z, 0, -offset.x).normalize();
     tgt.addScaledVector(right, -shift); pos.addScaledVector(right, -shift);
   }
+  if (isMobile && cardOpen()){
+    const toward = new THREE.Vector3(offset.x, 0, offset.z).normalize(), k = offset.length()*.24;
+    tgt.addScaledVector(toward, k); pos.addScaledVector(toward, k);
+  }
   flyTo(pos, tgt);
 }
 function clearSelection(){
@@ -4830,6 +5013,7 @@ let sideTab = 'isl';
 function setSide(on, tab){
   if (tab) setTab(tab);
   sideEl.hidden = !on;
+  const ml = document.getElementById('mList'); if (ml) ml.setAttribute('aria-pressed', String(on));
   btnList.setAttribute('aria-pressed', String(on));
   btnLog.setAttribute('aria-pressed', String(on && sideTab === 'log'));
 }
@@ -5159,7 +5343,7 @@ addEventListener('keydown', e => {
 }, true);
 
 // 島名標籤避讓：和介面面板或彼此重疊時，先縮成只剩編號，再不行就隱藏（8px 緩衝避免閃爍）
-const panelSel = ['.brand', '.tools', '.hud', '.ctx.on', '#side:not([hidden])', '#card:not([hidden])', '#keeper:not([hidden])', '.legend:not([hidden])'];
+const panelSel = ['.brand', '.tools', '.mclock', '.dock', '.online', '.ctx.on', '#side:not([hidden])', '#card:not([hidden])', '#keeper:not([hidden])', '.legend:not([hidden])'];
 const labelState = labelEls.map(() => 2);
 let declutterTick = 0;
 function declutter(){
@@ -5178,8 +5362,9 @@ function declutter(){
     const cx = (r.left + r.right)/2, cy = (r.top + r.bottom)/2, h = r.height;
     const box = w => ({ left: cx - w/2, right: cx + w/2, top: cy - h/2, bottom: cy + h/2 });
     const fw = el._fw || r.width + 60, cw = el._cw || 60, cur = labelState[i];
+    const cap = isMobile && i !== selectedIdx && camera.position.distanceTo(islands[i].pos) > 22 ? 1 : 2;
     let ns = 0;
-    if (!clash(box(fw), cur >= 2 ? 0 : 8)) ns = 2;
+    if (cap === 2 && !clash(box(fw), cur >= 2 ? 0 : 8)) ns = 2;
     else if (!clash(box(cw), cur >= 1 ? 0 : 8)) ns = 1;
     if (ns) placed.push(box(ns === 2 ? fw : cw));
     if (ns !== cur){ labelState[i] = ns; el.classList.toggle('compact', ns === 1); el.classList.toggle('off', ns === 0); }
@@ -5928,8 +6113,46 @@ function showClock(){
   clockTime.textContent = String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m % 60).padStart(2,'0');
   let ph = PHASES[0]; for (const p of PHASES) if (m >= p[0]) ph = p;
   clockPhase.textContent = LANG === 'en' ? ph[2] : ph[1];
+  $('dialRot').setAttribute('transform', `rotate(${(m - 720)/1440*360} 42 42)`);
+  $('dialSky').setAttribute('fill', '#' + C.top.getHexString());
   updateDay(m);
 }
+// 手機版底部導覽與「更多」面板
+const moreSheet = $('moreSheet'), mMore = $('mMore'), mList = $('mList');
+function syncMore(){
+  moreSheet.querySelectorAll('.lrow[data-proxy]').forEach(b => b.setAttribute('aria-pressed', $(b.dataset.proxy).getAttribute('aria-pressed') || 'false'));
+  moreSheet.querySelectorAll('.wish-only').forEach(b => b.hidden = !document.body.classList.contains('online'));
+}
+function setMore(on){ if (on) syncMore(); moreSheet.hidden = !on; mMore.setAttribute('aria-expanded', String(on)); if (on){ setSide(false); } }
+mMore.addEventListener('click', () => setMore(moreSheet.hidden));
+moreSheet.addEventListener('click', e => {
+  if (e.target === moreSheet || e.target.closest('[data-close]')){ setMore(false); return; }
+  const b = e.target.closest('[data-proxy]'); if (!b) return;
+  $(b.dataset.proxy).click();
+  if (b.classList.contains('lrow')) syncMore(); else setMore(false);
+});
+$('mHome').addEventListener('click', () => { setMore(false); setSide(false); goOverview(); });
+mList.addEventListener('click', () => { setMore(false); setSide(sideEl.hidden); });
+// 「更多」面板往下拖就關閉
+(() => {
+  const card = moreSheet.querySelector('.msheet-card'); let y0 = null;
+  card.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; y0 = e.clientY; card.setPointerCapture(e.pointerId); });
+  card.addEventListener('pointermove', e => { if (y0 == null) return; card.style.transform = `translateY(${Math.max(0, e.clientY - y0)}px)`; });
+  const end = e => { if (y0 == null) return; const d = e.clientY - y0; y0 = null; card.style.transform = ''; if (d > 80) setMore(false); };
+  card.addEventListener('pointerup', end); card.addEventListener('pointercancel', end);
+})();
+addEventListener('keydown', e => { if (e.key === 'Escape' && !moreSheet.hidden){ setMore(false); e.stopImmediatePropagation(); } }, true);
+// 魔法時鐘的時間選單
+const dialBtn = $('dialBtn'), mpop = $('mpop');
+function setMpop(on){ mpop.hidden = !on; dialBtn.setAttribute('aria-expanded', String(on)); }
+dialBtn.addEventListener('click', e => { e.stopPropagation(); setMpop(mpop.hidden); setLpop(false); });
+const btnLayers = $('btnLayers'), lpop = $('lpop');
+function setLpop(on){ lpop.hidden = !on; btnLayers.setAttribute('aria-expanded', String(on)); }
+btnLayers.addEventListener('click', e => { e.stopPropagation(); setLpop(lpop.hidden); setMpop(false); });
+mpop.addEventListener('click', e => { if (e.target.closest('[data-min]')) setMpop(false); });
+lpop.addEventListener('click', e => e.stopPropagation());
+addEventListener('pointerdown', e => { if (!e.target.closest('.mclock')) setMpop(false); if (!e.target.closest('.layers')) setLpop(false); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && (!mpop.hidden || !lpop.hidden)){ setMpop(false); setLpop(false); e.stopImmediatePropagation(); } }, true);
 document.querySelectorAll('[data-min]').forEach(b => b.addEventListener('click', () => { minutes = +b.dataset.min; showClock(); }));
 const btnPause = document.getElementById('btnPause');
 function setPaused(v){ paused = v; btnPause.setAttribute('aria-pressed', String(v)); }
