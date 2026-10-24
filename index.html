@@ -231,9 +231,9 @@ body{height:100%;margin:0;background:var(--page);color:var(--text);overflow:hidd
 .legend i{display:inline-block;width:26px;height:0;border-top:3px solid #db6a41;vertical-align:middle;margin-right:6px}
 .legend i.d{border-top-style:dashed}.legend i.p{border-top-style:dotted}
 /* 線上互動（只在連上雲端時出現） */
-#btnWish,.online{display:none!important}
-body.online #btnWish{display:inline-flex!important}
-body.online .online{display:flex!important}
+#btnWish,.online:not(body){display:none!important}
+body.is-online #btnWish{display:inline-flex!important}
+body.is-online .online{display:flex!important}
 .online{position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:5;align-items:center;gap:8px;padding:6px 8px 6px 14px;border-radius:999px;
   background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--glass-line);box-shadow:var(--shadow);font-size:13px;font-weight:700}
 .online .live{font-size:0}
@@ -270,11 +270,11 @@ body.online .online{display:flex!important}
 .card .wishes li{display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.55}
 .card .wishes .dot{margin-top:6px}
 .card .wishes small{display:block;color:var(--muted);font-size:12px}
-body.online .ctx{top:66px}
-@media (max-width:1100px){ body.online .online .wc,body.online .online .sepv:last-of-type{display:none} }
+body.is-online .ctx{top:66px}
+@media (max-width:1100px){ body.is-online .online .wc,body.is-online .online .sepv:last-of-type{display:none} }
 @media (max-width:800px){
   .online{left:10px;right:10px;top:auto;transform:none;bottom:76px;justify-content:center;flex-wrap:wrap;border-radius:18px}
-  body.online .side,body.online .card,body.online .keeper{bottom:132px}
+  body.is-online .side,body.is-online .card,body.is-online .keeper{bottom:132px}
 }
 /* 角色互動按鈕、島民清單 */
 .card .acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:14px 0 10px}
@@ -419,7 +419,7 @@ body.photo .mclock,body.photo .dock{display:none!important}
   .dock .dk{width:60px;min-height:52px;font-size:11px}
   .lpop{right:0}
   .legend{bottom:84px}
-  body.online .online{bottom:80px!important;left:10px!important;right:10px}
+  body.is-online .online{bottom:80px!important;left:10px!important;right:10px}
 }
 @media (prefers-reduced-motion:reduce){ .mclock .runes{animation:none} #dialRot{transition:none} }
 /* 手機版：底部導覽列與「更多」面板 */
@@ -458,8 +458,8 @@ body.photo .mclock,body.photo .dock{display:none!important}
   .hint{bottom:auto;top:122px;max-width:calc(100% - 24px);text-align:center}
   .legend{bottom:76px}
   .photo-exit{bottom:18px}
-  body.online .online{bottom:76px!important}
-  body.online .side,body.online .card,body.online .keeper{bottom:120px}
+  body.is-online .online{bottom:76px!important}
+  body.is-online .side,body.is-online .card,body.is-online .keeper{bottom:120px}
   .isl-label{font-size:12px;padding:4px 10px 4px 5px}
   .mclock{top:8px;left:8px}
 }
@@ -489,7 +489,7 @@ body.photo .mclock,body.photo .dock{display:none!important}
 .sw2 input:focus-visible + i,.pill input:focus-visible + span{outline:3px solid #211d1d;outline-offset:2px}
 .pill span{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--btn);box-shadow:inset 0 0 0 1px var(--line);font-size:13px;font-weight:700;cursor:pointer}
 .pill input:checked + span{background:#211d1d;color:#fff8f4}
-.nameplate.avatar.online::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#43b36a;margin-right:5px;box-shadow:0 0 0 2px rgba(67,179,106,.3)}
+.nameplate.avatar.live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#43b36a;margin-right:5px;box-shadow:0 0 0 2px rgba(67,179,106,.3)}
 /* 名牌 */
 .nameplate{pointer-events:none;white-space:nowrap;font:700 11px "Noto Sans TC","PingFang TC",sans-serif;padding:3px 8px;border-radius:999px;
   background:#fff8f4;color:#211d1d;box-shadow:0 2px 8px rgba(74,42,20,.18);transform:translateY(-6px)}
@@ -5673,7 +5673,7 @@ async function connectOnline(){
       if (!ses || !ses.session) await sb.auth.signInAnonymously();
       const { data: u } = await sb.auth.getUser(); myUid = u && u.user ? u.user.id : null;
     } catch(e){ myUid = null; }
-    document.body.classList.add('online');
+    document.body.classList.add('is-online');
     const { data, error } = await sb.from('lanterns').select('id,island,message,name,color,created_at').order('created_at', { ascending:false }).limit(MAXL);
     if (!error && data) data.slice().reverse().forEach(r => addLantern(r, false));
     updateWishCount();
@@ -5691,7 +5691,7 @@ async function connectOnline(){
     });
     room.subscribe(status => { if (status === 'SUBSCRIBED'){ onlineReady = true; trackMe(true); updateOnlinePill(); } });
   } catch (e) {
-    document.body.classList.remove('online');
+    document.body.classList.remove('is-online');
     sb = null; room = null;
   }
 }
@@ -6423,7 +6423,7 @@ function avatarAct(k, key){
 }
 function syncRemoteAvatar(key, v){
   if (v.uid && avatarWalkers.has('p:' + v.uid)){
-    const w = avatarWalkers.get('p:' + v.uid); w.online = true; w.plate.classList.add('online');
+    const w = avatarWalkers.get('p:' + v.uid); w.online = true; w.plate.classList.add('live');
     const goal = nearestNodeTo(v.tgt); if (w.lastGoal !== goal){ w.lastGoal = goal; w.goal = goal; if (w.wait <= 0 && !w.m.riding) w.wait = .01; }
     return;
   }
@@ -6435,7 +6435,7 @@ function syncRemoteAvatar(key, v){
   if (w.lastGoal !== goal){ w.lastGoal = goal; w.goal = goal; if (w.wait <= 0 && !w.m.riding) w.wait = .01; }
 }
 function markOffline(onlineUids){
-  for (const [k, w] of avatarWalkers) if (k.startsWith('p:')){ const on = onlineUids.has(k.slice(2)); w.online = on; w.plate.classList.toggle('online', on); }
+  for (const [k, w] of avatarWalkers) if (k.startsWith('p:')){ const on = onlineUids.has(k.slice(2)); w.online = on; w.plate.classList.toggle('live', on); }
 }
 
 // ---------- 每幀 ----------
@@ -6489,7 +6489,7 @@ function showClock(){
 const moreSheet = $('moreSheet'), mMore = $('mMore'), mList = $('mList');
 function syncMore(){
   moreSheet.querySelectorAll('.lrow[data-proxy]').forEach(b => b.setAttribute('aria-pressed', $(b.dataset.proxy).getAttribute('aria-pressed') || 'false'));
-  moreSheet.querySelectorAll('.wish-only').forEach(b => b.hidden = !document.body.classList.contains('online'));
+  moreSheet.querySelectorAll('.wish-only').forEach(b => b.hidden = !document.body.classList.contains('is-online'));
 }
 function setMore(on){ if (on) syncMore(); moreSheet.hidden = !on; mMore.setAttribute('aria-expanded', String(on)); if (on){ setSide(false); } }
 mMore.addEventListener('click', () => setMore(moreSheet.hidden));
