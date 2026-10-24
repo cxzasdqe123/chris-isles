@@ -301,6 +301,7 @@ body.online .ctx{top:66px}
 /* 第 6 階段：對話框、收集冊、小遊戲、島民 */
 .modal{position:absolute;inset:0;display:grid;place-items:center;background:rgba(33,29,29,.34);z-index:30;padding:16px}
 .modal[hidden]{display:none}
+.modal-card [hidden]{display:none!important}
 .modal-card{position:relative;width:min(440px,100%);max-height:calc(100% - 20px);overflow-y:auto;border-radius:24px;padding:24px;background:var(--panel);backdrop-filter:blur(18px);box-shadow:0 30px 80px rgba(33,29,29,.3);display:grid;gap:12px}
 .modal-card.wide{width:min(560px,100%)}
 .modal-card .x{position:absolute;right:12px;top:12px;min-width:38px;min-height:38px}
@@ -462,6 +463,33 @@ body.photo .mclock,body.photo .dock{display:none!important}
   .isl-label{font-size:12px;padding:4px 10px 4px 5px}
   .mclock{top:8px;left:8px}
 }
+/* 小遊戲 */
+.potions{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;justify-items:center;padding:6px 0}
+.potion{width:100px;height:100px;border-radius:50%;border:0;cursor:pointer;background:radial-gradient(circle at 35% 30%,#fff 0,var(--pc) 35%,color-mix(in srgb,var(--pc) 70%,#211d1d) 100%);
+  box-shadow:0 6px 16px rgba(33,29,29,.18),inset 0 -6px 0 rgba(0,0,0,.12);transition:transform .12s,box-shadow .12s;position:relative}
+.potion span{position:absolute;left:50%;top:-10px;width:22px;height:16px;margin-left:-11px;border-radius:5px;background:#b48560}
+.potion.lit{transform:scale(1.1);box-shadow:0 0 0 6px rgba(255,255,255,.7),0 0 30px var(--pc)}
+.potion:focus-visible{outline:3px solid #db6a41;outline-offset:3px}
+.meter .best{font-size:12px;color:var(--muted)}
+.gcv{width:100%;max-width:340px;aspect-ratio:320/360;justify-self:center;border-radius:16px;touch-action:none;box-shadow:inset 0 0 0 1px var(--line)}
+.nests{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.nest{aspect-ratio:1;border:0;border-radius:50%;background:radial-gradient(circle at 50% 70%,#c9a65a,#a07a3a);box-shadow:inset 0 8px 0 rgba(0,0,0,.18);cursor:pointer;position:relative;overflow:hidden}
+.nest .dr{position:absolute;inset:6%;transform:translateY(70%);transition:transform .12s}
+.nest.up .dr{transform:translateY(0)}
+.nest .dr svg{width:100%;height:100%}
+.nest.ok{box-shadow:0 0 0 4px #43b36a}
+.nest.bad{box-shadow:0 0 0 4px #b8442a}
+/* 島民編輯 */
+.swrow,.pillrow{display:flex;flex-wrap:wrap;gap:8px}
+.sw2{cursor:pointer}
+.sw2 input,.pill input{position:absolute;opacity:0}
+.sw2 i{display:block;width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(0,0,0,.08)}
+.sw2 i.orig{background:conic-gradient(#f7a8c0,#ffd27a,#7fe0d4,#c9b8ff,#f7a8c0)}
+.sw2 input:checked + i{box-shadow:0 0 0 3px var(--panel),0 0 0 5px #db6a41}
+.sw2 input:focus-visible + i,.pill input:focus-visible + span{outline:3px solid #211d1d;outline-offset:2px}
+.pill span{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--btn);box-shadow:inset 0 0 0 1px var(--line);font-size:13px;font-weight:700;cursor:pointer}
+.pill input:checked + span{background:#211d1d;color:#fff8f4}
+.nameplate.avatar.online::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#43b36a;margin-right:5px;box-shadow:0 0 0 2px rgba(67,179,106,.3)}
 /* 名牌 */
 .nameplate{pointer-events:none;white-space:nowrap;font:700 11px "Noto Sans TC","PingFang TC",sans-serif;padding:3px 8px;border-radius:999px;
   background:#fff8f4;color:#211d1d;box-shadow:0 2px 8px rgba(74,42,20,.18);transform:translateY(-6px)}
@@ -621,7 +649,10 @@ body.photo .legend,body.photo .hint,body.photo .labels,body.photo .online{displa
       <div class="shards" id="bookGrid"></div>
       <h3 data-en="Mini games">小遊戲</h3>
       <div class="acts">
-        <button class="act" data-game="quote"><span class="i" data-icon="flask"></span><span data-en="Quote Cauldron">報價大鍋</span></button>
+        <button class="act" data-game="potion"><span class="i" data-icon="flask"></span><span data-en="Potion Memory">魔藥記憶</span></button>
+        <button class="act" data-game="meteor"><span class="i" data-icon="sparkle"></span><span data-en="Catch the Stars">接流星</span></button>
+        <button class="act" data-game="feed"><span class="i" data-icon="flame"></span><span data-en="Feed the Dragonlings">餵小龍</span></button>
+        <button class="act" data-game="dive"><span class="i" data-icon="bubbles"></span><span data-en="One-breath Dive">一口氣潛水</span></button>
         <button class="act" data-game="stones"><span class="i" data-icon="ghost"></span><span data-en="Ghost Stones">幽靈踏石</span></button>
         <button class="act" data-game="hunt"><span class="i" data-icon="paw"></span><span data-en="Find Pudding">找布丁</span></button>
       </div>
@@ -630,14 +661,19 @@ body.photo .legend,body.photo .hint,body.photo .labels,body.photo .online{displa
   </div>
   <div class="modal" id="gameDlg" hidden role="dialog" aria-modal="true"><div class="modal-card" id="gameCard" tabindex="-1"></div></div>
   <div class="modal" id="avatarDlg" hidden role="dialog" aria-modal="true" aria-labelledby="avTitle">
-    <form class="modal-card" id="avForm">
+    <form class="modal-card wide" id="avForm">
       <button type="button" class="btn x" data-close aria-label="關閉"><span class="i" data-icon="close"></span></button>
       <div class="eyebrow">BECOME AN ISLANDER</div>
       <h2 id="avTitle" data-en="Become an islander">成為島民</h2>
-      <p class="sub" data-en="Pick a look and a name, and you will stroll around the isles. Other visitors online will see you too.">選一個造型、取個名字，你就會在群島上散步；連上線的其他訪客也看得到你。</p>
-      <div class="species" id="avSpecies"></div>
+      <p class="sub" id="avSync"></p>
+      <h3 data-en="Species">種族</h3><div class="species" id="avSpecies"></div>
+      <h3 data-en="Body colour">身體顏色</h3><div class="swrow" id="avColor"></div>
+      <h3 data-en="Hat">帽子</h3><div class="pillrow" id="avHat"></div><div class="swrow" id="avHatCol"></div>
+      <h3 data-en="Outfit">披風或圍巾</h3><div class="pillrow" id="avWear"></div><div class="swrow" id="avWearCol"></div>
+      <label class="fld"><span data-en="Favourite isle">最愛的島（大多時間會待在那裡）</span><select id="avHome"></select></label>
       <label class="fld"><span data-en="Name">名字</span><input id="avName" maxlength="12" required placeholder="例如：小星"></label>
-      <div class="acts2"><button type="button" class="btn row" data-close><span data-en="Cancel">取消</span></button><button type="submit" class="btn row go"><span data-en="Let’s go!">出發！</span></button></div>
+      <label class="fld"><span data-en="A line about you">一句話介紹自己（選填）</span><input id="avMotto" maxlength="24" placeholder="例如：正在學怎麼讓燈籠飛起來"></label>
+      <div class="acts2"><button type="button" class="btn row" data-close><span data-en="Cancel">取消</span></button><button type="submit" class="btn row go"><span data-en="Save and go!">儲存並出發</span></button></div>
     </form>
   </div>
   <button class="photo-exit" id="photoExit"><span data-en="Exit photo mode (Esc)">離開拍照模式（Esc）</span></button>
@@ -794,8 +830,8 @@ body.photo .legend,body.photo .hint,body.photo .labels,body.photo .online{displa
    兩個值留空時，心願燈籠和即時同遊會自動隱藏，網頁其他功能照常運作。
    ===================================================================== */
 const ONLINE = {
-  supabaseUrl: '',
-  supabaseKey: ''
+  supabaseUrl: 'https://auqozvunnvjltwxfhpns.supabase.co',
+  supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1cW96dnVubnZqbHR3eGZocG5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NTMwOTgsImV4cCI6MjEwODQyOTA5OH0.MTAUOzbwaeE9B6b6nQs4FrcAsrWPGa3ayEcvJiF-wYk'
 };
 
 /* =====================================================================
@@ -3510,9 +3546,12 @@ WI.bubble = new THREE.InstancedMesh(GEOMS.sphere, new THREE.MeshStandardMaterial
 WI.bubble.instanceMatrix.setUsage(THREE.DynamicDrawUsage); WI.bubble.frustumCulled = false; WI.bubble.renderOrder = 8; scene.add(WI.bubble);
 const roleX = {};
 const roleMat = new THREE.MeshStandardMaterial({ vertexColors:true, roughness:.7 });
-function roleMesh(key, which){
-  const role = ROLES[key], list = role[which]; if (!list || !list.length) return null;
-  const id = key + which;
+const HEADWEAR = { goblin:[3,4,5], pumpkin:[5,6], catmage:[9,10,11], owl:[6,7,8], shroom:[0,1,2,3,4,5] };
+function roleMesh(key, which, variant = ''){
+  const role = ROLES[key]; let list = role[which];
+  if (variant === 'bare' && which === 'headX' && HEADWEAR[key]) list = list.filter((_, i) => !HEADWEAR[key].includes(i));
+  if (!list || !list.length) return null;
+  const id = key + which + variant;
   if (!roleX[id]){
     const geo = mergeColored(list.map(([g, c, x, y, z, sx, sy, sz, rx = 0, ry = 0, rz = 0]) => [GEOMS[g], c, M4(x, y, z, sx, sy, sz, rx, ry, rz)]));
     const im = new THREE.InstancedMesh(geo, roleMat, MAXW);
@@ -3645,6 +3684,7 @@ function drawWalker(w, t, camPos){
   const blink = (Math.sin(t*.9 + w.phase*30) > .97) ? .25 : 1;
   part(WI.eye, i*2, -.032, .335, .086, .022, .028*blink, .015, 0, 0, 0, 0, _WH);
   part(WI.eye, i*2 + 1, .032, .335, .086, .022, .028*blink, .015, 0, 0, 0, 0, _WH);
+  if (w.avatar || w.custom) drawAccessories(w, i);
   if (w.hx) w.hx.im.setMatrixAt(w.hx.slot, _WH);
   if (w.bx) w.bx.im.setMatrixAt(w.bx.slot, _W);
   if (role.bubble){ _PW.copy(_W).multiply(_m.makeTranslation(0, .22, 0)).multiply(_P.makeScale(.62, .7, .62)); WI.bubble.setMatrixAt(i, _PW); } else WI.bubble.setMatrixAt(i, ZERO);
@@ -4151,47 +4191,66 @@ const hana = (() => {
   return { g, body, legs, arms, head, capeG, wand, wandTip, wandGlow, shadow, M, m, state:'idle', timer:2, island:'academy', node, headTop: new THREE.Vector3(), loveCD: 0, act: null };
 })();
 
-// 魔法布偶貓：奶油色身體、深色重點色、藍眼睛、會發光的星星鈴鐺
+// 魔法布偶貓布丁：全白、兩腳走路、戴巫師帽、披斗篷，跟在 Hana 後面
 const cat = (() => {
   const g = new THREE.Group();
-  const mat = c => MS(c, { roughness:.8 });
-  const C = mat('#f6f0e6'), P = mat('#8a6a55'), Pm = mat('#a88a75'), W = mat('#fffaf2'), eye = new THREE.MeshStandardMaterial({ color:'#7fc4ff', emissive:new THREE.Color('#3f8fe0'), emissiveIntensity:.6 });
+  const mat = c => MS(c, { roughness:.75 });
+  const W = mat('#fbf8f3'), W2 = mat('#f1ebe2'), PK = mat('#f4a9b8'), INK = mat('#1d2340');
+  const CAPE = MS('#9a7fd6', { roughness:.7, side:THREE.DoubleSide }), HAT = mat('#7d63c4'), GOLD = MS('#e2b54a', { metalness:.6, roughness:.3 });
+  const eye = new THREE.MeshStandardMaterial({ color:'#8fd0ff', emissive:new THREE.Color('#3f8fe0'), emissiveIntensity:.5 });
   const bell = new THREE.MeshStandardMaterial({ color:'#ffe9a8', emissive:new THREE.Color('#ffc94a'), emissiveIntensity:1.6 });
   const add = (par, geo, mt, s, p, r) => { const o = new THREE.Mesh(geo, mt); o.scale.set(...s); o.position.set(...p); if (r) o.rotation.set(...r); o.castShadow = true; par.add(o); return o; };
   const body = new THREE.Group(); g.add(body);
-  add(body, new THREE.CapsuleGeometry(.5, 1, 6, 14), C, [.13, .13, .14], [0, .1, -.01], [PI/2, 0, 0]);
-  add(body, GEOMS.sphere, W, [.12, .11, .1], [0, .12, .1]);
-  const head = new THREE.Group(); head.position.set(0, .19, .14); body.add(head);
-  add(head, GEOMS.sphere, C, [.18, .15, .15], [0, 0, 0]);
-  add(head, GEOMS.sphere, P, [.12, .07, .06], [0, .018, .05]);
-  add(head, GEOMS.sphere, Pm, [.09, .06, .05], [0, -.012, .058]);
-  add(head, GEOMS.sphere, W, [.055, .035, .035], [0, -.038, .064]);
-  for (const sd of [-1, 1]){
-    add(head, GEOMS.cone, P, [.07, .09, .04], [sd*.055, .09, -.006], [0, 0, sd*-.35]);
-    add(head, GEOMS.cone, mat('#e8b4a8'), [.036, .052, .012], [sd*.053, .085, .012], [0, 0, sd*-.35]);
-    add(head, GEOMS.sphere, eye, [.03, .032, .012], [sd*.034, .016, .074]);
-    add(head, GEOMS.sphere, mat('#10202a'), [.012, .022, .006], [sd*.034, .016, .081]);
-    add(head, GEOMS.sphere, W, [.008, .008, .005], [sd*.03 + .006, .024, .083]);
-    for (const k of [-1, 1]) add(head, GEOMS.box, mat('#efe8de'), [.06, .002, .002], [sd*.058, -.026 + k*.007, .07], [0, 0, sd*k*.12]);
-  }
-  add(head, GEOMS.sphere, mat('#f2a0b5'), [.018, .012, .008], [0, -.018, .09]);
-  add(head, new THREE.TorusGeometry(.5, .07, 6, 22), mat('#b9467a'), [.13, .13, .1], [0, -.075, -.03], [PI/2 + .15, 0, 0]);
-  add(head, GEOMS.glowcone, bell, [.026, .03, .01], [0, -.098, .03]);
-  const legs = [[-.045, .075], [.045, .075], [-.045, -.085], [.045, -.085]].map(([x, z]) => {
-    const piv = new THREE.Group(); piv.position.set(x, .065, z); body.add(piv);
-    add(piv, new THREE.CylinderGeometry(.5, .42, 1, 10), mat('#e9dccb'), [.045, .045, .045], [0, -.02, 0]);
-    add(piv, GEOMS.sphere, W, [.048, .028, .055], [0, -.048, .01]);
+  const legs = [-1, 1].map(sd => {
+    const piv = new THREE.Group(); piv.position.set(sd*.032, .075, 0); body.add(piv);
+    add(piv, GEOMS.cylinder, W, [.05, .06, .05], [0, -.03, 0]);
+    add(piv, GEOMS.sphere, W, [.06, .035, .075], [0, -.062, .012]);
+    add(piv, GEOMS.sphere, PK, [.025, .006, .025], [0, -.078, .03]);
     return piv;
   });
-  // 蓬鬆的大尾巴：往上翹的弧線
-  const tail = new THREE.Group(); tail.position.set(0, .13, -.14); body.add(tail);
-  [[0, 0, -.02, .07, .1, -.9], [0, .07, -.07, .075, .1, -.45], [0, .15, -.09, .078, .1, -.05], [0, .22, -.085, .07, .08, .3]].forEach(([x, y, z, r, h, rx]) =>
-    add(tail, new THREE.CapsuleGeometry(.5, 1, 4, 10), P, [r, h, r], [x, y, z], [rx, 0, 0]));
-  const shadow = new THREE.Mesh(new THREE.CircleGeometry(.5, 16).rotateX(-PI/2), shadowMat); shadow.scale.setScalar(.2);
+  add(body, GEOMS.sphere, W, [.13, .14, .11], [0, .13, 0]);
+  add(body, GEOMS.sphere, W2, [.08, .08, .04], [0, .12, .045]);
+  // 尾巴：從斗篷下方往上翹
+  const tail = new THREE.Group(); tail.position.set(0, .08, -.05); body.add(tail);
+  [[0, .0, -.02, .035, .05, -1.1], [0, .045, -.06, .036, .05, -.6], [0, .1, -.075, .036, .05, -.1], [0, .15, -.07, .032, .04, .3]].forEach(([x, y, z, r, h, rx]) =>
+    add(tail, new THREE.CapsuleGeometry(.5, 1, 4, 10), W, [r, h, r], [x, y, z], [rx, 0, 0]));
+  // 斗篷
+  const capeG = new THREE.Group(); capeG.position.set(0, .2, -.005); body.add(capeG);
+  add(capeG, new THREE.CylinderGeometry(.5, 1, 1, 18, 1, true, PI*.55, PI*.9), CAPE, [.1, .16, .095], [0, -.08, 0]);
+  add(body, GEOMS.sphere, GOLD, [.022, .022, .014], [0, .195, .055]);
+  const arms = [-1, 1].map(sd => {
+    const piv = new THREE.Group(); piv.position.set(sd*.062, .17, 0); piv.rotation.z = sd*.25; body.add(piv);
+    add(piv, GEOMS.cylinder, W, [.036, .065, .036], [0, -.03, 0]);
+    add(piv, GEOMS.sphere, W, [.04, .04, .04], [0, -.065, 0]);
+    return piv;
+  });
+  // 頭
+  const head = new THREE.Group(); head.position.y = .29; body.add(head);
+  add(head, GEOMS.sphere, W, [.2, .17, .175], [0, 0, 0]);
+  for (const sd of [-1, 1]){
+    add(head, GEOMS.cone, W, [.07, .085, .045], [sd*.058, .085, -.005], [0, 0, sd*-.32]);
+    add(head, GEOMS.cone, PK, [.038, .05, .012], [sd*.056, .08, .014], [0, 0, sd*-.32]);
+    add(head, GEOMS.sphere, eye, [.034, .038, .012], [sd*.036, .008, .08]);
+    add(head, GEOMS.sphere, INK, [.016, .026, .006], [sd*.036, .008, .087]);
+    add(head, GEOMS.sphere, W, [.009, .009, .005], [sd*.031, .018, .09]);
+    add(head, GEOMS.sphere, PK, [.026, .012, .006], [sd*.058, -.028, .074]);
+    for (const k of [-1, 1]) add(head, GEOMS.box, mat('#e6ddd2'), [.06, .002, .002], [sd*.062, -.02 + k*.007, .07], [0, 0, sd*k*.12]);
+  }
+  add(head, GEOMS.sphere, PK, [.018, .012, .008], [0, -.014, .088]);
+  add(head, GEOMS.glowcone, bell, [.026, .03, .01], [0, -.092, .04]);
+  // 巫師帽
+  const hat = new THREE.Group(); hat.position.set(.01, .072, -.01); hat.rotation.set(-.08, 0, -.18); head.add(hat);
+  add(hat, new THREE.CylinderGeometry(.5, .5, 1, 24), HAT, [.21, .01, .2], [0, 0, 0]);
+  add(hat, GEOMS.cylinder, GOLD, [.12, .018, .12], [0, .012, 0]);
+  add(hat, new THREE.ConeGeometry(.5, 1, 18), HAT, [.115, .16, .115], [0, .085, 0]);
+  const tip = new THREE.Group(); tip.position.y = .16; tip.rotation.z = -.9; hat.add(tip);
+  add(tip, new THREE.ConeGeometry(.5, 1, 12), HAT, [.05, .08, .05], [0, .035, 0]);
+  add(tip, GEOMS.glowcone, bell, [.026, .03, .01], [0, .08, 0]);
+  const shadow = new THREE.Mesh(new THREE.CircleGeometry(.5, 16).rotateX(-PI/2), shadowMat); shadow.scale.setScalar(.18);
   const sparkle = new THREE.Sprite(new THREE.SpriteMaterial({ map: mistTex, color:'#fff0b0', transparent:true, opacity:.5, depthWrite:false, blending:THREE.AdditiveBlending }));
-  sparkle.scale.setScalar(.12);
+  sparkle.scale.setScalar(.1);
   scene.add(g, shadow, sparkle);
-  return { g, body, head, legs, tail, shadow, sparkle, pos: hana.m.pos.clone().add(new THREE.Vector3(.3, 0, -.2)), yaw: 0, moving: false, headTop: new THREE.Vector3(), act: null, actT: 0, name:'布丁' };
+  return { g, body, head, legs, arms, tail, capeG, shadow, sparkle, pos: hana.m.pos.clone().add(new THREE.Vector3(.2, 0, -.4)), yaw: 0, moving: false, headTop: new THREE.Vector3(), act: null, actT: 0, name:'布丁' };
 })();
 
 // 潟湖裡的人魚（裝飾居民）
@@ -4291,30 +4350,47 @@ function updateHana(dt, t){
 function updateCat(dt, t){
   const K = cat, H = hana, big = THREE.MathUtils.clamp(camera.position.distanceTo(K.pos)/20, 1, 1.45);
   K.actT -= dt; if (K.actT <= 0) K.act = null;
-  let tgt;
-  if (catHunt.active){ K.pos.copy(catHunt.pos); K.moving = false; K.yaw += dt*.2; }
-  else if (H.m.riding){ tgt = H.headTop.clone().setY(H.headTop.y - .06); K.pos.copy(tgt); K.yaw = H.m.yaw; K.moving = false; }
+  const lerpAng = (a, b, k) => a + Math.atan2(Math.sin(b - a), Math.cos(b - a))*k;
+  let speed = 0;
+  if (catHunt.active){ K.pos.copy(catHunt.pos); K.moving = false; K.yaw += dt*.3; }
+  else if (H.m.riding){ K.pos.copy(H.headTop).setY(H.headTop.y - .05); K.yaw = H.m.yaw; K.moving = false; }
   else {
-    if (K.act === 'chase'){ const a = t*2.4; tgt = H.m.pos.clone().add(_hv.set(Math.cos(a)*.45, 0, Math.sin(a)*.45)); }
-    else { _hv.set(.42, 0, -.12).applyAxisAngle(UPV, H.m.yaw); tgt = H.m.pos.clone().add(_hv); }
-    const d = tgt.distanceTo(K.pos);
-    if (d > 2.5) K.pos.copy(tgt);
-    K.moving = d > .1;
-    if (K.moving){ _hv.subVectors(tgt, K.pos).setY(0).normalize(); K.yaw = Math.atan2(_hv.x, _hv.z); K.pos.addScaledVector(_hv, Math.min(d, dt*(K.act === 'chase' ? 1.4 : .9))); }
-    K.pos.y = H.m.pos.y;
-    if (!K.moving && K.act !== 'purr' && K.act !== 'roll'){ _hv.subVectors(H.m.pos, K.pos); K.yaw = THREE.MathUtils.lerp(K.yaw, Math.atan2(_hv.x, _hv.z), Math.min(1, dt*2)); }
+    // 跟在 Hana 後方稍微偏右；用遲滯區間避免原地抖動
+    let tgt;
+    if (K.act === 'chase'){ const a = t*2.2; tgt = _hv.set(Math.cos(a)*.5, 0, Math.sin(a)*.5).add(H.m.pos); }
+    else tgt = _hv.set(.16, 0, -.4).applyAxisAngle(UPV, H.m.yaw).add(H.m.pos);
+    const dx = tgt.x - K.pos.x, dz = tgt.z - K.pos.z, d = Math.hypot(dx, dz);
+    if (d > 3) K.pos.set(tgt.x, H.m.pos.y, tgt.z);
+    if (!K.moving && d > .3) K.moving = true;
+    if (K.moving && d < .06) K.moving = false;
+    if (K.moving){
+      speed = Math.min(K.act === 'chase' ? 1.3 : 1.05, d*2.6 + .12);
+      const step = Math.min(d, speed*dt);
+      K.pos.x += dx/d*step; K.pos.z += dz/d*step;
+      K.yaw = lerpAng(K.yaw, Math.atan2(dx, dz), Math.min(1, dt*8));
+    } else if (K.act !== 'roll'){
+      K.yaw = lerpAng(K.yaw, Math.atan2(H.m.pos.x - K.pos.x, H.m.pos.z - K.pos.z), Math.min(1, dt*3));
+    }
+    K.pos.y = THREE.MathUtils.lerp(K.pos.y, H.m.pos.y, Math.min(1, dt*10));
   }
-  const ph = t*12;
-  K.legs.forEach((l, i) => l.rotation.x = K.moving ? Math.sin(ph + (i === 0 || i === 3 ? 0 : PI))*.6 : 0);
-  K.tail.rotation.set(-.3 + Math.sin(t*2)*.15, Math.sin(t*1.6)*.4, 0);
-  K.head.rotation.set(K.act === 'purr' ? -.3 : 0, K.moving ? 0 : Math.sin(t*.7)*.3, K.act === 'purr' ? Math.sin(t*4)*.15 : 0);
-  K.body.rotation.set(0, 0, K.act === 'roll' ? Math.sin(Math.min(1, (2.5 - K.actT)/2.5)*PI)*PI : 0);
-  K.body.position.y = K.moving ? Math.abs(Math.sin(ph))*.01 : 0;
-  K.g.position.copy(K.pos); K.g.rotation.set(0, K.yaw, 0); K.g.scale.setScalar(big*(H.m.riding ? .7 : 1)*(K.growUntil > simTime ? 2.4 : 1));
+  // 兩腳走路的動作
+  const ph = t*11, walk = K.moving ? 1 : 0, sw = Math.sin(ph)*walk;
+  K.legs[0].rotation.x = sw*.65; K.legs[1].rotation.x = -sw*.65;
+  K.arms[0].rotation.set(-sw*.5, 0, -.25); K.arms[1].rotation.set(sw*.5, 0, .25);
+  K.body.position.y = walk*Math.abs(Math.sin(ph))*.018;
+  K.body.rotation.set(0, 0, walk*Math.sin(ph)*.06);
+  K.tail.rotation.set(Math.sin(t*2)*.12, Math.sin(t*1.6)*.35, 0);
+  K.capeG.rotation.x = .08 + walk*Math.abs(Math.sin(ph))*.18 + Math.sin(t*1.3)*.02;
+  K.head.rotation.set(K.act === 'purr' ? -.25 : 0, K.moving ? 0 : Math.sin(t*.7)*.25, K.act === 'purr' ? Math.sin(t*4)*.18 : 0);
+  if (K.act === 'purr'){ K.arms[0].rotation.set(-1.4, 0, .3); K.arms[1].rotation.set(-1.4, 0, -.3); }
+  let spin = 0, hop = 0;
+  if (K.act === 'roll'){ const k = 1 - Math.max(0, K.actT)/2.5; spin = k*PI*4; hop = Math.abs(Math.sin(k*PI*4))*.12; K.arms[0].rotation.set(-2.6, 0, -.4); K.arms[1].rotation.set(-2.6, 0, .4); }
+  K.g.position.copy(K.pos); K.g.position.y += hop; K.g.rotation.set(0, K.yaw + spin, 0);
+  K.g.scale.setScalar(big*.8*(H.m.riding ? .75 : 1)*(K.growUntil > simTime ? 2.4 : 1));
   if (BOOST.floatAt && boostOn('float') && K.pos.distanceTo(BOOST.floatAt) < 4) K.g.position.y += boostEnv('float')*.6;
-  K.shadow.visible = !H.m.riding; K.shadow.position.set(K.pos.x, K.pos.y + .005, K.pos.z); K.shadow.scale.setScalar(.2*big);
-  K.headTop.set(K.pos.x, K.pos.y + .38*big, K.pos.z);
-  K.sparkle.position.set(K.pos.x + Math.sin(t*1.7)*.15*big, K.pos.y + (.3 + Math.sin(t*2.3)*.06)*big, K.pos.z + Math.cos(t*1.3)*.15*big);
+  K.shadow.visible = !H.m.riding; K.shadow.position.set(K.pos.x, K.pos.y + .005, K.pos.z); K.shadow.scale.setScalar(.18*big);
+  K.headTop.set(K.pos.x, K.pos.y + .46*big, K.pos.z);
+  K.sparkle.position.set(K.pos.x + Math.sin(t*1.7)*.14*big, K.pos.y + (.42 + Math.sin(t*2.3)*.05)*big, K.pos.z + Math.cos(t*1.3)*.14*big);
   K.sparkle.material.opacity = .35 + nightNow*.4 + (K.act === 'chase' ? .3 : 0);
 }
 function hanaSeekChris(){
@@ -4410,16 +4486,16 @@ const top = (id, ly = 1) => itemPt(id, 0, ly, 0);
 const ISL_ACTS = {
   keep:        [['light','lantern','點亮回家的燈','Light the way home'], ['wish','sparkle','對噴泉許願','Make a wish'], ['dragon','flame','召喚守護龍','Call the dragon']],
   academy:     [['books','book','讓書飛起來','Fly the books'], ['orb','sparkle','問水晶球','Ask the orb'], ['bell','wand','敲下課鐘','Ring the bell'], ['hunt','paw','玩：找布丁','Play: Find Pudding']],
-  alchemy:     [['brew','flask','熬一鍋報價','Brew a quote'], ['crystal','sparkle','加入 AI 魔晶','Add AI crystal'], ['quote','flask','玩：報價大鍋','Play: Quote Cauldron']],
-  dragon:      [['feed','heart','餵小龍','Feed the dragonlings'], ['egg','sparkle','摸摸龍蛋','Touch the eggs']],
+  alchemy:     [['brew','flask','熬一鍋報價','Brew a quote'], ['crystal','sparkle','加入 AI 魔晶','Add AI crystal'], ['potion','flask','玩：魔藥記憶','Play: Potion Memory']],
+  dragon:      [['feed','heart','餵小龍','Feed the dragonlings'], ['egg','sparkle','摸摸龍蛋','Touch the eggs'], ['feedgame','flame','玩：餵小龍','Play: Feed the Dragonlings']],
   elfwood:     [['fireflies','leaf','召喚螢火蟲','Call the fireflies'], ['letter','log','寄出葉子信','Send a leaf letter']],
   market:      [['lanterns','lantern','放天燈','Release lanterns'], ['cheers','heart','乾杯','Cheers']],
-  observatory: [['meteor','telescope','流星雨','Meteor shower'], ['rings','sparkle','轉動星環','Spin the rings']],
+  observatory: [['meteor','telescope','流星雨','Meteor shower'], ['rings','sparkle','轉動星環','Spin the rings'], ['catch','sparkle','玩：接流星','Play: Catch the Stars']],
   pumpkin:     [['pumpkins','pumpkin','點亮南瓜燈','Light the pumpkins'], ['harvest','heart','採收一顆南瓜','Harvest']],
   inn:         [['boo','ghost','嚇幽靈一跳','Spook the ghosts'], ['read','book','讀一頁書','Read a page'], ['stones','ghost','玩：幽靈踏石','Play: Ghost Stones']],
   mine:        [['dig','pick','挖魔晶','Dig a crystal'], ['cart','run','開動礦車','Start the carts']],
   skyport:     [['launch','balloon','飛空艇加速','Full speed'], ['balloon','balloon','放飛熱氣球','Release a balloon']],
-  deep:        [['jelly','bubbles','召喚水母','Call the jellyfish'], ['splash','wave','人魚跳水','Mermaid leap']]
+  deep:        [['jelly','bubbles','召喚水母','Call the jellyfish'], ['splash','wave','人魚跳水','Mermaid leap'], ['dive','bubbles','玩：一口氣潛水','Play: One-breath Dive']]
 };
 function islActButtons(id){ return `<div class="acts">${(ISL_ACTS[id] || []).map(([k, ic, zh, en]) => `<button class="act" data-act="isl:${id}:${k}">${svgIcon(ic, 18)}<span>${tr(zh, en)}</span></button>`).join('')}</div>`; }
 function islAct(id, k){
@@ -4450,7 +4526,10 @@ function islAct(id, k){
     case 'mine:cart': boostK('portal', 7); walkers.filter(w => w.fl.walker === 'goblin').forEach(w => { w.boost = 7; emote(w, '!'); }); return tr('礦車全速前進，哥布林們跑了起來', 'The carts roll at full speed');
     case 'skyport:launch': boostK('airship', 10); return tr('出走計劃一號艦全速巡航！', 'Outdoor Project No.1 at full speed!');
     case 'skyport:balloon': shardEvent('balloon'); releaseBalloon(top('sky-balloon', .2)); burst(top('sky-balloon', .5), P.gold, 30); return tr('一顆熱氣球緩緩升空，載著一個新的旅行主題', 'A balloon rises with a new trip theme');
-    case 'alchemy:quote': gameQuote(); return '';
+    case 'alchemy:potion': gamePotion(); return '';
+    case 'observatory:catch': gameMeteor(); return '';
+    case 'dragon:feedgame': gameFeed(); return '';
+    case 'deep:dive': gameDive(); return '';
     case 'inn:stones': gameStones(); return '';
     case 'academy:hunt': gameFindCat(); return '';
     case 'deep:jelly': boostK('jelly', 14); return tr('發光水母一隻隻浮上天空', 'The glowing jellyfish rise into the sky');
@@ -5061,7 +5140,7 @@ qEl.addEventListener('input', buildSide);
 sideEl.addEventListener('click', e => {
   const it = e.target.closest('[data-item]'); if (it){ selectItem(it.dataset.item); return; }
   const fl = e.target.closest('[data-flow]'); if (fl){ selectFlow(+fl.dataset.flow); return; }
-  const rs = e.target.closest('[data-res]'); if (rs){ const id = rs.dataset.res; if (id.startsWith('flow:')){ const f = DATA.flows[+id.slice(5)]; selectWalker(walkers.find(w => w.fl === f && !w.m.riding) || walkers.find(w => w.fl === f)); } else openChar(id); return; }
+  const rs = e.target.closest('[data-res]'); if (rs){ const id = rs.dataset.res; if (id.startsWith('av:')){ const w = avatarWalkers.get(id.slice(3)); if (w) openAvatarCard(w); return; } if (id.startsWith('flow:')){ const f = DATA.flows[+id.slice(5)]; selectWalker(walkers.find(w => w.fl === f && !w.m.riding) || walkers.find(w => w.fl === f)); } else openChar(id); return; }
   const sm = e.target.closest('summary'); if (sm){ selectIsland(islIdx(sm.parentElement.dataset.isl)); }
 });
 
@@ -5107,7 +5186,7 @@ function updateCtx(){
 const CHAR_INFO = {
   chris:   { name:'魔法師 Chris', en:'Chris the Wizard', sub:'島主・攝影師・魔法師', subEn:'Isle keeper, photographer, wizard', icon:'camera', pos: () => chris.m.pos },
   hana:    { name:'Hana 院長', en:'Dean Hana', sub:'魔法學院院長・Chris 的伴侶', subEn:'Dean of the Arcane Academy, Chris’s partner', icon:'book', pos: () => hana.m.pos },
-  cat:     { name:'布丁', en:'Pudding', sub:'Hana 的魔法布偶貓', subEn:'Hana’s magic ragdoll cat', icon:'paw', pos: () => cat.pos },
+  cat:     { name:'布丁', en:'Pudding', sub:'Hana 的魔法學徒貓', subEn:'Hana’s apprentice cat', icon:'paw', pos: () => cat.pos },
   dragon:  { name:'守護龍', en:'Guardian dragon', sub:'盤旋在王城上空', subEn:'Circles the Royal Keep', icon:'flame', pos: () => dragon.g.position },
   guards:  { name:'王城衛兵', en:'Royal guards', sub:'6 位玩具兵守城', subEn:'Six toy soldiers', icon:'shield', pos: () => guards[0] ? guards[0].g.position : center },
   mermaids:{ name:'潟湖人魚', en:'Lagoon mermaids', sub:'珊瑚、汐汐、波波', subEn:'Three mermaids in the lagoon', icon:'bubbles', pos: () => lagoonMermaids[0].m.position },
@@ -5117,7 +5196,7 @@ const CHAR_INFO = {
 const ACTS = {
   chris:   [['photo','camera','拍一張照','Take a photo'], ['hana','heart','去找 Hana','Find Hana'], ['dive','bubbles','去自由潛水','Go freediving'], ['wave','sparkle','比個 YA','Peace sign']],
   hana:    [['teach','wand','上一堂魔法課','Teach a class'], ['seek','heart','去找 Chris','Find Chris'], ['pet','paw','摸摸布丁','Pet Pudding'], ['home','book','回學院','Back to the academy']],
-  cat:     [['purr','heart','撒嬌','Purr'], ['chase','sparkle','追光點','Chase the light'], ['roll','paw','翻肚肚','Roll over']],
+  cat:     [['purr','heart','撒嬌','Purr'], ['chase','sparkle','追光點','Chase the light'], ['roll','paw','轉圈圈','Twirl']],
   dragon:  [['fire','flame','噴火','Breathe fire'], ['swoop','balloon','低空飛過','Swoop low']],
   guards:  [['salute','shield','全體敬禮','Salute'], ['march','run','加快巡邏','March faster']],
   mermaids:[['wave','heart','跟人魚揮手','Wave']],
@@ -5137,7 +5216,7 @@ function charCardHTML(id){
   const lead = {
     chris: tr('群島最厲害的魔法師。白天在鍊金工坊熬報價，下班後到礦坑打磨 AI 魔晶，還親手蓋了出走計劃的飛空港。背著單眼相機四處收集光，午夜則不背氣瓶，一口氣潛進蒼瀾深潛域。', 'The most powerful wizard in the isles: quote alchemist by day, AI crystal-smith after hours, founder of the Outdoor Project sky harbor, photographer and freediver.'),
     hana: tr('魔法學院的院長，也是 Chris 的伴侶。她替整座學院排定咒語課表，現實裡是軟體業的產品經理。總是帶著魔法布偶貓布丁，一看到 Chris 頭上就會冒出愛心。兩人最愛一起吃美食、喝咖啡、去旅行，或在城堡裡耍廢。', 'Dean of the Arcane Academy and Chris’s partner; a software product manager in real life.'),
-    cat: tr('Hana 的魔法布偶貓。藍眼睛、會發光的星星鈴鐺，Hana 搭纜車時牠會坐在她頭上。', 'Hana’s magic ragdoll cat. When Hana rides the cable car, Pudding sits on her head.'),
+    cat: tr('Hana 的魔法學徒貓。一身雪白，戴著紫色巫師帽、披著小斗篷，用兩隻腳跟在 Hana 後面走。Hana 搭纜車時，牠會坐在她頭上。', 'Hana’s snow-white apprentice cat in a little wizard hat and cape, walking on two legs behind her.'),
     dragon: tr('守護王城的紅金色巨龍，繞著城堡盤旋，偶爾噴出一道火焰。', 'The red-gold dragon guarding the keep.'),
     guards: tr('童話玩具兵造型的衛兵，兩位守門、兩位巡邏、兩位在城牆上站哨。', 'Toy-soldier guards at the gate, on patrol and on the walls.'),
     mermaids: tr('住在蒼瀾深潛域潟湖裡的三位人魚。Chris 潛水經過時，她們會冒出愛心打招呼。', 'Three mermaids in the lagoon who greet Chris when he dives.'),
@@ -5177,7 +5256,7 @@ function runAct(spec){
     if (k === 'pet'){ if (hana.m.riding) return toast(tr('Hana 正在搭纜車', 'Hana is riding')); hana.node = nearestNodeTo(hana.m.pos); hana.island = nodes[hana.node].isl; hana.state = 'pet'; hana.timer = 3.5; cat.act = 'purr'; cat.actT = 3.5; emote(cat, 'heart'); msg = tr('布丁舒服地呼嚕呼嚕', 'Pudding purrs happily'); }
     if (k === 'home'){ msg = hanaGo('academy', ringAt('academy', PI/2)) ? tr('Hana 回魔法學院', 'Hana heads back to the academy') : tr('Hana 正在搭乘，等一下', 'Hana is riding, try again soon'); }
   }
-  else if (kind === 'cat'){ cat.act = k; cat.actT = k === 'chase' ? 5 : k === 'roll' ? 2.5 : 3.5; emote(cat, k === 'purr' ? 'heart' : k === 'chase' ? 'sparkle' : 'note'); msg = { purr:tr('布丁蹭了蹭 Hana', 'Pudding nuzzles Hana'), chase:tr('布丁追著光點跑來跑去', 'Pudding chases the sparkles'), roll:tr('布丁翻了個肚肚', 'Pudding rolls over') }[k]; }
+  else if (kind === 'cat'){ cat.act = k; cat.actT = k === 'chase' ? 5 : k === 'roll' ? 2.5 : 3.5; emote(cat, k === 'purr' ? 'heart' : k === 'chase' ? 'sparkle' : 'note'); msg = { purr:tr('布丁蹭了蹭 Hana', 'Pudding nuzzles Hana'), chase:tr('布丁追著光點跑來跑去', 'Pudding chases the sparkles'), roll:tr('布丁原地轉了好幾圈，斗篷飛了起來', 'Pudding twirls, cape flying') }[k]; }
   else if (kind === 'dragon'){ if (k === 'fire'){ dragon.nextFire = 0; msg = tr('守護龍噴出一道火焰！', 'The dragon breathes fire!'); } else { dragon.swoopUntil = st + 7; msg = tr('守護龍俯衝下來低空飛過城堡', 'The dragon swoops low over the castle'); } }
   else if (kind === 'guards'){ if (k === 'salute'){ guards.forEach(G => G.saluteUntil = st + 3.5); msg = tr('全體衛兵立正敬禮！', 'All guards salute!'); } else { guards.forEach(G => G.boostUntil = st + 8); msg = tr('衛兵們加快腳步巡邏', 'The guards march faster'); } }
   else if (kind === 'mermaids'){ lagoonMermaids.forEach((L, i) => setTimeout(() => emote(L, 'heart'), i*300)); msg = tr('人魚們冒出愛心回應你', 'The mermaids wave back'); }
@@ -5200,7 +5279,9 @@ function resRows(){
     { sec: tr('主角', 'Main characters'), list: ['chris', 'hana', 'cat'].map(id => ({ id, ...CHAR_INFO[id] })) },
     { sec: tr('守護者', 'Guardians'), list: ['dragon', 'guards'].map(id => ({ id, ...CHAR_INFO[id] })) },
     { sec: tr('島民', 'Residents'), list: DATA.flows.map((f, i) => { const r = ROLES[f.walker] || {}; const n = walkers.filter(w => w.fl === f).length; return { id: 'flow:' + i, name: r.name, en: r.en, sub: `×${n}・${islName(f.from)} → ${islName(f.to)}`, subEn: `×${n} · ${islName(f.from)} → ${islName(f.to)}`, icon: byId[f.from].icon }; }) },
-    { sec: tr('海裡的朋友', 'Friends in the sea'), list: ['mermaids', 'serpent', 'kraken'].map(id => ({ id, ...CHAR_INFO[id] })) }
+    { sec: tr('海裡的朋友', 'Friends in the sea'), list: ['mermaids', 'serpent', 'kraken'].map(id => ({ id, ...CHAR_INFO[id] })) },
+    { sec: tr('訪客島民', 'Visiting islanders'), list: (window.__avatarWalkers ? [...window.__avatarWalkers.entries()] : []).filter(([, w]) => !w.gone).map(([k, w]) => ({ id: 'av:' + k, name: w.name, en: w.name,
+        sub: (k === 'me' ? '你・' : w.online ? '● 在線・' : '') + w.role.name + (w.custom && w.custom.motto ? '・' + w.custom.motto : ''), subEn: (k === 'me' ? 'You · ' : w.online ? '● online · ' : '') + w.role.en, icon:'user' })) }
   ];
   return rows;
 }
@@ -5473,15 +5554,17 @@ function syncVisitors(state){
     v.name = clean(p.name, 16) || tr('旅人', 'Traveller');
     v.plate.textContent = v.name; v.plate.style.borderColor = v.color;
     v.sp = ROLES[p.sp] && SPECIES.includes(p.sp) ? p.sp : '';
+    v.uid = typeof p.uid === 'string' ? p.uid.slice(0, 64) : '';
     syncRemoteAvatar(key, v);
   });
   for (const [k, v] of visitors) if (!seen.has(k)){ scene.remove(v.plateObj); v.plate.remove(); visitors.delete(k); removeAvatar('r:' + k); }
+  markOffline(new Set([...visitors.values()].map(v => v.uid).filter(Boolean)));
   updateOnlinePill();
 }
 function visitorTick(dt, t){
   let i = 0;
   for (const v of visitors.values()){
-    if (v.sp){ v.plateObj.visible = false; const aw = avatarWalkers.get('r:' + [...visitors.entries()].find(e => e[1] === v)[0]); if (aw) v.headTop.copy(aw.headTop || aw.m.pos); continue; }
+    if (v.sp || (v.uid && avatarWalkers.has('p:' + v.uid))){ v.plateObj.visible = false; const aw = avatarWalkers.get('r:' + [...visitors.entries()].find(e => e[1] === v)[0]); if (aw) v.headTop.copy(aw.headTop || aw.m.pos); continue; }
     v.cur.lerp(v.tgt, Math.min(1, dt*1.5));
     _lv.copy(v.cur); if (!reduced){ _lv.x += Math.sin(t*1.3 + v.ph)*.25; _lv.y += Math.sin(t*2.1 + v.ph)*.15; _lv.z += Math.cos(t*1.1 + v.ph)*.25; }
     setI(visitorMesh, i, _lv, .12); setI(visitorHalo, i, _lv, .5 + Math.sin(t*3 + v.ph)*.06);
@@ -5502,7 +5585,7 @@ function trackMe(force){
   if (!force && (now - lastSentT < 1500 || lastSent.distanceTo(controls.target) < .6)) return;
   lastSent.copy(controls.target); lastSentT = now;
   const tg = controls.target;
-  room.track({ x: +tg.x.toFixed(2), y: +tg.y.toFixed(2), z: +tg.z.toFixed(2), name: myAvatar ? myAvatar.name : myNick, color: myColor, sp: myAvatar ? myAvatar.species : '' }).catch(() => {});
+  room.track({ x: +tg.x.toFixed(2), y: +tg.y.toFixed(2), z: +tg.z.toFixed(2), name: myAvatar ? myAvatar.name : myNick, color: myColor, sp: myAvatar ? myAvatar.species : '', uid: myUid || '' }).catch(() => {});
 }
 
 // ---------- 介面 ----------
@@ -5584,11 +5667,18 @@ async function connectOnline(){
       s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js';
       s.onload = res; s.onerror = rej; document.head.appendChild(s);
     });
-    sb = window.supabase.createClient(ONLINE.supabaseUrl, ONLINE.supabaseKey, { auth: { persistSession:false, autoRefreshToken:false } });
+    sb = window.supabase.createClient(ONLINE.supabaseUrl, ONLINE.supabaseKey, { auth: { persistSession:true, autoRefreshToken:true, storageKey:'lanternfall-auth' } });
+    try {
+      const { data: ses } = await sb.auth.getSession();
+      if (!ses || !ses.session) await sb.auth.signInAnonymously();
+      const { data: u } = await sb.auth.getUser(); myUid = u && u.user ? u.user.id : null;
+    } catch(e){ myUid = null; }
     document.body.classList.add('online');
     const { data, error } = await sb.from('lanterns').select('id,island,message,name,color,created_at').order('created_at', { ascending:false }).limit(MAXL);
     if (!error && data) data.slice().reverse().forEach(r => addLantern(r, false));
     updateWishCount();
+    loadIslanders();
+    if (myAvatar) saveIslander(myAvatar);
     sb.channel('lanterns-live')
       .on('postgres_changes', { event:'INSERT', schema:'public', table:'lanterns' }, p => addLantern(p.new, true))
       .subscribe();
@@ -5823,7 +5913,7 @@ let brewCount = 0;
 const SHARDS = [
   { id:'keep', name:'回家之光', hint:'讓王城回家的那盞燈亮起來', want: () => shardRecent('keep-light', 30), pos: () => itemPt('keep-lantern', 0, 1.6, 0) },
   { id:'academy', name:'院長的書籤', hint:'它躲在學院主塔的後面', want: () => true, pos: () => itemPt('aca-tower', 0, .35, -.75) },
-  { id:'alchemy', name:'完美報價', hint:'在鍊金工坊熬滿三鍋報價（玩小遊戲也算）', want: () => brewCount >= 3, pos: () => itemPt('alc-works', .28, 1.1, .28) },
+  { id:'alchemy', name:'完美報價', hint:'在鍊金工坊熬滿三鍋報價（魔藥記憶撐過 5 輪也算）', want: () => brewCount >= 3, pos: () => itemPt('alc-works', .28, 1.1, .28) },
   { id:'dragon', name:'小龍的鱗片', hint:'餵小龍的時候，有一片鱗片會掉下來', want: () => shardRecent('feed', 30), pos: () => new THREE.Vector3(byId.dragon.x, byId.dragon.top + 1.1, byId.dragon.z) },
   { id:'elfwood', name:'螢光葉', hint:'只在夜晚的精靈森林發光', want: () => nightNow > .6 || boostOn('ff'), pos: () => new THREE.Vector3(byId.elfwood.x + .8, byId.elfwood.top + .9, byId.elfwood.z + .6) },
   { id:'market', name:'天燈的火種', hint:'放天燈時，跟著燈籠一起升起', want: () => boostOn('skylant'), pos: () => new THREE.Vector3(byId.market.x + .6, byId.market.top + 2.2 + Math.sin(simTime)*.2, byId.market.z) },
@@ -5896,31 +5986,175 @@ let gameLoop = 0;
 function closeGame(){ gameEl.hidden = true; cancelAnimationFrame(gameLoop); }
 function openGame(html){ gameCard.innerHTML = `<button class="btn x" data-close aria-label="${tr('關閉', 'Close')}">${svgIcon('close', 18)}</button>` + html; gameEl.hidden = false; }
 gameEl.addEventListener('click', e => { if (e.target === gameEl || e.target.closest('[data-close]')) closeGame(); });
-// 1. 報價大鍋：剛好湊到預算
-const INGR = [['場地', 40], ['交通', 25], ['餐飲', 30], ['住宿', 35], ['茶歇', 10], ['導覽', 15], ['翻譯', 20], ['佈置', 5]];
-function gameQuote(){
-  const pickN = INGR.slice().sort(() => Math.random() - .5).slice(0, 3 + Math.floor(Math.random()*2));
-  const target = pickN.reduce((a, [, c]) => a + c, 0);
-  const pot = new Set();
-  const render = (msg = '', ok = false) => {
-    const sum = [...pot].reduce((a, i) => a + INGR[i][1], 0);
-    openGame(`<div class="eyebrow">${tr('小遊戲・鍊金工坊', 'MINI GAME')}</div><h2>${tr('報價大鍋', 'The Quote Cauldron')}</h2>
-      <p class="sub">${tr(`客戶的預算是 <b>${target} 金幣</b>。挑選材料丟進大鍋，剛好湊到預算就能熬出完美報價。`, `Budget: <b>${target} coins</b>. Add ingredients to hit it exactly.`)}</p>
-      <div class="ingr">${INGR.map(([n, c], i) => `<button class="chip ${pot.has(i) ? 'on' : ''}" data-ing="${i}">${n}<small>${c}</small></button>`).join('')}</div>
-      <div class="meter"><div class="bar"><i style="width:${Math.min(100, sum/target*100)}%;background:${sum > target ? '#b8442a' : '#db6a41'}"></i></div><b>${sum} / ${target}</b></div>
-      <p class="status ${ok ? 'good' : ''}">${msg}</p>
-      <div class="acts2"><button class="btn row go" data-brew>${tr('熬煮！', 'Brew!')}</button></div>`);
-    gameCard.querySelectorAll('[data-ing]').forEach(b => b.onclick = () => { const i = +b.dataset.ing; pot.has(i) ? pot.delete(i) : pot.add(i); Sound.sfx('click'); render(); });
-    gameCard.querySelector('[data-brew]').onclick = () => {
-      const s2 = [...pot].reduce((a, i) => a + INGR[i][1], 0);
-      if (s2 === target){
-        brewCount++; boostK('brew', 6); burst(itemPt('alc-works', .28, .4, .28), ['#f7a8c0','#ffe08a','#7fe0d4','#c9b8ff'], 90, { speed:1.4, up:3 }); Sound.sfx('collect');
-        render(tr('完美！誤差 0 元，這鍋報價熬成功了。', 'Perfect! Zero difference.') + (brewCount >= 3 && !found.has('alchemy') ? tr(' 工坊上方好像有東西在發光……', ' Something is glowing above the workshop…') : ''), true);
-        setTimeout(() => { if (!gameEl.hidden) gameQuote(); }, 1800);
-      } else { Sound.sfx('fail'); render(s2 > target ? tr(`超出預算 ${s2 - target} 金幣，拿掉一些材料試試。`, `Over by ${s2 - target}.`) : tr(`還差 ${target - s2} 金幣。`, `${target - s2} short.`)); }
-    };
+// 1. 魔藥記憶（鍊金工坊）：記住大鍋冒泡的顏色順序
+function gamePotion(){
+  const C2 = [['#f7a8c0', tr('粉紅', 'Pink')], ['#7fe0d4', tr('藍綠', 'Teal')], ['#ffd27a', tr('金黃', 'Gold')], ['#c9b8ff', tr('淡紫', 'Lilac')]];
+  let seq = [], idx = 0, busy = true, best = +store.get('lf-best-potion') || 0, counted = false;
+  openGame(`<div class="eyebrow">${tr('小遊戲・鍊金工坊', 'MINI GAME')}</div><h2>${tr('魔藥記憶', 'Potion Memory')}</h2>
+    <p class="sub">${tr('大鍋會依序冒出彩色泡泡，記住順序再照著點。每一輪會多一種顏色，撐過 5 輪就算熬成功。', 'Watch the bubbles, then repeat the order. Each round adds one more. Survive 5 rounds.')}</p>
+    <div class="potions">${C2.map(([c, n], i) => `<button class="potion" data-p="${i}" style="--pc:${c}" aria-label="${n}"><span></span></button>`).join('')}</div>
+    <div class="meter"><b id="pRound">${tr('第 0 輪', 'Round 0')}</b><span class="best">${tr('最佳', 'Best')} ${best}</span></div>
+    <p class="status" id="pMsg">${tr('準備好了嗎？', 'Ready?')}</p>
+    <div class="acts2"><button class="btn row go" id="pStart">${tr('開始', 'Start')}</button></div>`);
+  const btns = [...gameCard.querySelectorAll('.potion')], msg = $('pMsg');
+  const flash = i => { const b = btns[i]; b.classList.add('lit'); Sound.sfx('click'); setTimeout(() => b.classList.remove('lit'), 360); };
+  const play = () => {
+    busy = true; idx = 0; $('pRound').textContent = tr(`第 ${seq.length} 輪`, `Round ${seq.length}`); msg.textContent = tr('看清楚……', 'Watch…'); msg.className = 'status';
+    seq.forEach((k, i) => setTimeout(() => flash(k), 500 + i*620));
+    setTimeout(() => { busy = false; msg.textContent = tr('換你了！', 'Your turn!'); }, 500 + seq.length*620);
   };
-  render();
+  const next = () => { seq.push(Math.floor(Math.random()*4)); play(); };
+  $('pStart').onclick = () => { seq = []; counted = false; $('pStart').hidden = true; next(); };
+  btns.forEach((b, i) => b.onclick = () => {
+    if (busy) return;
+    flash(i);
+    if (i !== seq[idx]){
+      busy = true; Sound.sfx('fail');
+      const got = seq.length - 1; if (got > best){ best = got; store.set('lf-best-potion', String(best)); }
+      msg.textContent = tr(`配方錯了！這次記住了 ${got} 輪。`, `Wrong mix! You made it ${got} rounds.`); msg.className = 'status';
+      $('pStart').hidden = false; $('pStart').textContent = tr('再來一次', 'Try again'); return;
+    }
+    idx++;
+    if (idx >= seq.length){
+      busy = true;
+      if (seq.length >= 5 && !counted){
+        counted = true; brewCount++; boostK('brew', 6); burst(itemPt('alc-works', .28, .4, .28), ['#f7a8c0','#ffe08a','#7fe0d4','#c9b8ff'], 90, { speed:1.4, up:3 }); Sound.sfx('collect');
+        msg.textContent = tr('熬成功了！大鍋冒出彩虹色的泡泡，繼續挑戰更高輪數吧。', 'Brewed! Keep going for a higher score.'); msg.className = 'status good';
+      } else { msg.textContent = tr('答對了！', 'Correct!'); msg.className = 'status good'; }
+      setTimeout(next, 900);
+    }
+  });
+}
+// 2. 接流星（星象塔）：左右移動籃子接星星、避開烏雲
+function gameMeteor(){
+  openGame(`<div class="eyebrow">${tr('小遊戲・星象塔', 'MINI GAME')}</div><h2>${tr('接流星', 'Catch the Stars')}</h2>
+    <p class="sub">${tr('拖曳或用左右鍵移動星燈籃，接住 15 顆流星就能召喚流星雨。小心烏雲，碰到會扣分。', 'Drag or use arrow keys. Catch 15 stars; avoid the clouds.')}</p>
+    <canvas id="gCv" class="gcv" width="320" height="360"></canvas>
+    <p class="status" id="gMsg"></p>
+    <div class="acts2"><button class="btn row go" id="gGo">${tr('開始', 'Start')}</button></div>`);
+  const cv = $('gCv'), x = cv.getContext('2d'), W = 320, H = 360, msg = $('gMsg');
+  let bx = W/2, items = [], score = 0, time = 35, run = false, last = 0, spawn = 0, keys = {};
+  const toX = e => { const r = cv.getBoundingClientRect(); bx = THREE.MathUtils.clamp((e.clientX - r.left)/r.width*W, 24, W - 24); };
+  cv.onpointerdown = e => { cv.setPointerCapture(e.pointerId); toX(e); }; cv.onpointermove = e => { if (e.buttons || e.pointerType !== 'mouse') toX(e); };
+  gameCard.onkeydown = e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){ keys[e.key] = true; e.preventDefault(); } };
+  gameCard.onkeyup = e => { keys[e.key] = false; };
+  const star = (cx, cy, r, c) => { x.beginPath(); for (let i = 0; i < 10; i++){ const rr = i % 2 ? r*.45 : r, a = -PI/2 + i*PI/5; x.lineTo(cx + Math.cos(a)*rr, cy + Math.sin(a)*rr); } x.closePath(); x.fillStyle = c; x.fill(); };
+  const draw = () => {
+    const gr = x.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#1e2c58'); gr.addColorStop(1, '#5a5e9e'); x.fillStyle = gr; x.fillRect(0, 0, W, H);
+    for (let i = 0; i < 30; i++){ x.fillStyle = 'rgba(255,255,255,.5)'; x.fillRect((i*73) % W, (i*37) % (H - 60), 1.5, 1.5); }
+    items.forEach(it => {
+      if (it.k === 'star'){ x.strokeStyle = 'rgba(255,240,180,.35)'; x.lineWidth = 3; x.beginPath(); x.moveTo(it.x - it.vx*.15, it.y - 22); x.lineTo(it.x, it.y); x.stroke(); star(it.x, it.y, 10, '#ffe08a'); }
+      else { x.fillStyle = '#8a8fa8'; [[-10, 0, 11], [4, -4, 13], [16, 2, 10]].forEach(([dx, dy, r]) => { x.beginPath(); x.arc(it.x + dx, it.y + dy, r, 0, PI*2); x.fill(); }); }
+    });
+    x.fillStyle = '#db6a41'; x.beginPath(); x.ellipse(bx, H - 26, 28, 12, 0, 0, PI); x.fill();
+    x.fillStyle = '#fcea8b'; x.fillRect(bx - 28, H - 30, 56, 5);
+    x.fillStyle = '#fff8f4'; x.font = '700 16px Georgia'; x.fillText(`★ ${score}`, 12, 24); x.fillText(`${Math.ceil(time)}s`, W - 46, 24);
+  };
+  const loop = now => {
+    const dt = Math.min(.05, (now - last)/1000 || 0); last = now;
+    if (run){
+      time -= dt; spawn -= dt;
+      if (keys.ArrowLeft) bx = Math.max(24, bx - 260*dt); if (keys.ArrowRight) bx = Math.min(W - 24, bx + 260*dt);
+      if (spawn <= 0){ spawn = .45 + Math.random()*.35; const k = Math.random() < .78 ? 'star' : 'cloud'; items.push({ k, x: 20 + Math.random()*(W - 40), y: -20, vy: 120 + Math.random()*80 + (35 - time)*3, vx: (Math.random() - .5)*40 }); }
+      items.forEach(it => { it.y += it.vy*dt; it.x += it.vx*dt; });
+      items = items.filter(it => {
+        if (it.y > H - 40 && it.y < H - 14 && Math.abs(it.x - bx) < 32){ if (it.k === 'star'){ score++; Sound.sfx('click'); } else { score = Math.max(0, score - 2); Sound.sfx('fail'); } return false; }
+        return it.y < H + 20;
+      });
+      if (time <= 0){
+        run = false; $('gGo').hidden = false; $('gGo').textContent = tr('再玩一次', 'Play again');
+        if (score >= 15){ msg.textContent = tr(`接到 ${score} 顆流星！星象塔上空下起了流星雨。`, `${score} stars! A meteor shower begins.`); msg.className = 'status good'; boostK('meteor', 10); Sound.sfx('collect'); }
+        else { msg.textContent = tr(`接到 ${score} 顆，還差 ${15 - score} 顆。`, `${score} caught, ${15 - score} to go.`); msg.className = 'status'; }
+      }
+    }
+    draw(); gameLoop = requestAnimationFrame(loop);
+  };
+  $('gGo').onclick = () => { items = []; score = 0; time = 35; run = true; msg.textContent = ''; $('gGo').hidden = true; gameCard.focus(); };
+  gameLoop = requestAnimationFrame(loop);
+}
+// 3. 餵小龍（龍之牧場）：點肚子餓的小龍，別吵醒睡覺的
+function gameFeed(){
+  const face = st => st === 'hungry'
+    ? `<svg viewBox="0 0 60 60"><circle cx="30" cy="34" r="20" fill="#58a6a6"/><path d="M18 18l-4-10 9 6M42 18l4-10-9 6" fill="#fcea8b"/><circle cx="23" cy="30" r="3.5" fill="#211d1d"/><circle cx="37" cy="30" r="3.5" fill="#211d1d"/><ellipse cx="30" cy="43" rx="8" ry="6" fill="#a34e34"/></svg>`
+    : `<svg viewBox="0 0 60 60"><circle cx="30" cy="34" r="20" fill="#6f7fb5"/><path d="M18 18l-4-10 9 6M42 18l4-10-9 6" fill="#fcea8b"/><path d="M19 31q4 3 8 0M33 31q4 3 8 0" stroke="#211d1d" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="44" y="16" font-size="11" font-weight="800" fill="#fff8f4">zZ</text></svg>`;
+  openGame(`<div class="eyebrow">${tr('小遊戲・龍之牧場', 'MINI GAME')}</div><h2>${tr('餵小龍', 'Feed the Dragonlings')}</h2>
+    <p class="sub">${tr('張開嘴的小龍肚子餓了，快點牠！閉著眼睛的在睡覺，點了會吵醒牠（扣分）。30 秒內餵 15 隻。', 'Tap the hungry ones (mouth open). Don’t wake the sleepers. Feed 15 in 30 s.')}</p>
+    <div class="nests">${Array.from({ length:9 }, (_, i) => `<button class="nest" data-n="${i}"><span class="dr"></span></button>`).join('')}</div>
+    <div class="meter"><b id="fScore">0 / 15</b><span id="fTime">30s</span></div>
+    <p class="status" id="fMsg"></p>
+    <div class="acts2"><button class="btn row go" id="fGo">${tr('開始', 'Start')}</button></div>`);
+  const nests = [...gameCard.querySelectorAll('.nest')], msg = $('fMsg');
+  let state = Array(9).fill(null), score = 0, left = 30, timer = 0, tick = 0;
+  const render = () => nests.forEach((n, i) => { n.classList.toggle('up', !!state[i]); n.querySelector('.dr').innerHTML = state[i] ? face(state[i]) : ''; });
+  const stop = () => { clearInterval(timer); clearInterval(tick); state.fill(null); render(); $('fGo').hidden = false; $('fGo').textContent = tr('再玩一次', 'Play again');
+    if (score >= 15){ msg.textContent = tr('小龍們吃飽了，開心地在牧場上空飛起來！', 'The dragonlings are full and take flight!'); msg.className = 'status good'; boostK('babies', 8); shardEvent('feed'); Sound.sfx('collect'); }
+    else { msg.textContent = tr(`餵了 ${score} 隻，再試一次吧。`, `Fed ${score}. Try again!`); msg.className = 'status'; } };
+  nests.forEach((n, i) => n.onclick = () => {
+    if (!state[i]) return;
+    if (state[i] === 'hungry'){ score++; Sound.sfx('click'); n.classList.add('ok'); setTimeout(() => n.classList.remove('ok'), 250); }
+    else { score = Math.max(0, score - 1); Sound.sfx('fail'); n.classList.add('bad'); setTimeout(() => n.classList.remove('bad'), 250); }
+    state[i] = null; render(); $('fScore').textContent = `${score} / 15`;
+  });
+  $('fGo').onclick = () => {
+    score = 0; left = 30; state.fill(null); render(); msg.textContent = ''; $('fGo').hidden = true; $('fScore').textContent = '0 / 15';
+    clearInterval(timer); clearInterval(tick);
+    timer = setInterval(() => { left--; $('fTime').textContent = left + 's'; if (left <= 0) stop(); }, 1000);
+    tick = setInterval(() => {
+      const free = state.map((s2, i) => s2 ? -1 : i).filter(i => i >= 0);
+      if (free.length){ const i = pickLine(free); state[i] = Math.random() < .7 ? 'hungry' : 'sleep'; const life = 1100 - (30 - left)*15; setTimeout(() => { state[i] = null; render(); }, life); }
+      render();
+    }, 520);
+  };
+  const oldClose = closeGame;
+  gameEl.addEventListener('click', function once(e){ if (e.target === gameEl || e.target.closest('[data-close]')){ clearInterval(timer); clearInterval(tick); gameEl.removeEventListener('click', once); } });
+}
+// 4. 一口氣潛水（蒼瀾深潛域）：按住往下潛，放開往上浮，在憋氣用完前收集水母光
+function gameDive(){
+  openGame(`<div class="eyebrow">${tr('小遊戲・蒼瀾深潛域', 'MINI GAME')}</div><h2>${tr('一口氣潛水', 'One-breath Dive')}</h2>
+    <p class="sub">${tr('像 Chris 一樣自由潛水：按住畫面（或空白鍵）往下潛，放開就會往上浮。收集 10 顆水母光，記得在氣用完前浮上水面換氣。', 'Hold to dive, release to rise. Collect 10 jellyfish lights, and surface before your breath runs out.')}</p>
+    <canvas id="gCv" class="gcv" width="320" height="360"></canvas>
+    <p class="status" id="gMsg"></p>
+    <div class="acts2"><button class="btn row go" id="gGo">${tr('開始', 'Start')}</button></div>`);
+  const cv = $('gCv'), x = cv.getContext('2d'), W = 320, H = 360, SURF = 56, msg = $('gMsg');
+  let y = SURF, vy = 0, hold = false, breath = 1, orbs = [], got = 0, run = false, last = 0, spawn = 0, t = 0;
+  cv.onpointerdown = e => { hold = true; cv.setPointerCapture(e.pointerId); }; cv.onpointerup = cv.onpointercancel = () => { hold = false; };
+  gameCard.onkeydown = e => { if (e.code === 'Space'){ hold = true; e.preventDefault(); } };
+  gameCard.onkeyup = e => { if (e.code === 'Space') hold = false; };
+  const end = (ok, text) => { run = false; $('gGo').hidden = false; $('gGo').textContent = tr('再潛一次', 'Dive again'); msg.textContent = text; msg.className = ok ? 'status good' : 'status'; if (ok){ boostK('jelly', 12); Sound.sfx('collect'); } else Sound.sfx('fail'); };
+  const draw = () => {
+    x.fillStyle = '#bfe6ef'; x.fillRect(0, 0, W, SURF);
+    const gr = x.createLinearGradient(0, SURF, 0, H); gr.addColorStop(0, '#5aa7b8'); gr.addColorStop(1, '#1e3c5a'); x.fillStyle = gr; x.fillRect(0, SURF, W, H - SURF);
+    x.strokeStyle = 'rgba(255,255,255,.6)'; x.lineWidth = 2; x.beginPath(); for (let i = 0; i <= W; i += 8) x.lineTo(i, SURF + Math.sin(i*.08 + t*3)*2); x.stroke();
+    orbs.forEach(o => { const g2 = x.createRadialGradient(o.x, o.y, 1, o.x, o.y, 16); g2.addColorStop(0, o.c); g2.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g2; x.beginPath(); x.arc(o.x, o.y, 16, 0, PI*2); x.fill();
+      x.fillStyle = o.c; x.beginPath(); x.arc(o.x, o.y, 6, PI, 0); x.fill(); for (let k = -1; k <= 1; k++){ x.fillRect(o.x + k*3 - .5, o.y, 1.2, 8 + Math.sin(t*6 + k)*2); } });
+    // 潛水員
+    x.save(); x.translate(80, y); x.rotate(hold ? .5 : -.3);
+    x.fillStyle = '#2f5f6b'; x.beginPath(); x.ellipse(0, 0, 16, 7, 0, 0, PI*2); x.fill();
+    x.fillStyle = '#f3d5bd'; x.beginPath(); x.arc(14, -2, 6, 0, PI*2); x.fill();
+    x.fillStyle = '#fcea8b'; x.fillRect(13, -5, 8, 4);
+    x.fillStyle = '#2fa8a0'; x.beginPath(); x.moveTo(-15, 0); x.lineTo(-30, -6 + Math.sin(t*10)*4); x.lineTo(-30, 6 + Math.sin(t*10)*4); x.closePath(); x.fill();
+    x.restore();
+    x.fillStyle = 'rgba(0,0,0,.25)'; x.fillRect(12, 12, 120, 10); x.fillStyle = breath > .3 ? '#7fe0d4' : '#ff8a7a'; x.fillRect(12, 12, 120*breath, 10);
+    x.fillStyle = '#fff8f4'; x.font = '700 14px Georgia'; x.fillText(`◍ ${got} / 10`, W - 76, 22);
+  };
+  const loop = now => {
+    const dt = Math.min(.05, (now - last)/1000 || 0); last = now; t += dt;
+    if (run){
+      vy += (hold ? 260 : -200)*dt; vy *= .96; y += vy*dt;
+      if (y < SURF){ y = SURF; vy = Math.max(0, vy); }
+      if (y > H - 14){ y = H - 14; vy = 0; }
+      if (y <= SURF + 2) breath = Math.min(1, breath + dt*.6); else breath -= dt/8;
+      spawn -= dt;
+      if (spawn <= 0){ spawn = .9 + Math.random()*.7; orbs.push({ x: W + 20, y: SURF + 40 + Math.random()*(H - SURF - 70), c: pickLine(['#f7a8c0','#7fe0d4','#c9b8ff','#ffe08a']) }); }
+      orbs.forEach(o => o.x -= 70*dt);
+      orbs = orbs.filter(o => { if (Math.hypot(o.x - 80, o.y - y) < 20){ got++; Sound.sfx('click'); return false; } return o.x > -20; });
+      if (got >= 10) end(true, tr('收集到 10 顆水母光！深潛域的水母一隻隻飛上了天空。', '10 lights! The jellyfish rise into the sky.'));
+      else if (breath <= 0) end(false, tr('氣用完了！安全第一，先浮上水面休息一下再挑戰。', 'Out of breath! Safety first, rest and try again.'));
+    }
+    draw(); gameLoop = requestAnimationFrame(loop);
+  };
+  $('gGo').onclick = () => { y = SURF; vy = 0; breath = 1; orbs = []; got = 0; run = true; msg.textContent = ''; $('gGo').hidden = true; gameCard.focus(); };
+  gameLoop = requestAnimationFrame(loop);
 }
 // 2. 幽靈踏石：抓準時機連跳六顆
 function gameStones(){
@@ -5973,29 +6207,91 @@ function catFound(){
   toast(tr('找到了！布丁開心地蹭了蹭你的手。', 'Found it! Pudding nuzzles your hand.'));
 }
 
-// ---------- 成為島民：訪客自己的小角色 ----------
+// ---------- 成為島民：可自訂造型、永久留在群島上 ----------
 const SPECIES = ['catmage', 'ghost', 'shroom', 'owl', 'dragonling', 'pumpkin', 'goblin', 'mermaid'];
-let myAvatar = (() => { try { const v = JSON.parse(store.get('lanternfall-me') || 'null'); return v && ROLES[v.species] ? v : null; } catch(e){ return null; } })();
+const BODY_COLS = ['', '#f7a8c0', '#7fe0d4', '#ffd27a', '#c9b8ff', '#8db86f', '#6f7fb5', '#f4efe8', '#3a3346'];
+const ACC_COLS = ['#db6a41', '#6f5aa8', '#58a6a6', '#f2b5c6', '#fcea8b', '#211d1d', '#fff8f4'];
+const HATS = [['none','不戴','None'], ['wizard','巫師帽','Wizard hat'], ['crown','小皇冠','Crown'], ['flower','小花','Flower'], ['beret','貝雷帽','Beret'], ['bow','蝴蝶結','Bow']];
+const WEARS = [['none','不穿','None'], ['cape','披風','Cape'], ['scarf','圍巾','Scarf']];
+const HAT_LIFT = { catmage:.12, owl:.07, goblin:.05, pumpkin:.06, shroom:.1 };
+const okCol = c => /^#[0-9a-f]{6}$/i.test(c || '');
+function normAvatar(v){
+  if (!v || !SPECIES.includes(v.species)) return null;
+  return { species: v.species, name: clean(v.name, 12) || tr('旅人', 'Traveller'), color: okCol(v.color) ? v.color : '',
+    hat: HATS.some(h => h[0] === v.hat) ? v.hat : 'none', hatColor: okCol(v.hatColor) ? v.hatColor : '#6f5aa8',
+    wear: WEARS.some(h => h[0] === v.wear) ? v.wear : 'none', wearColor: okCol(v.wearColor) ? v.wearColor : '#db6a41',
+    home: byId[v.home] ? v.home : '', motto: clean(v.motto, 24) };
+}
+let myAvatar = (() => { try { return normAvatar(JSON.parse(store.get('lanternfall-me') || 'null')); } catch(e){ return null; } })();
 const avatarWalkers = new Map();
-function makeAvatarWalker(species, name, key){
-  if (walkers.length >= MAXW && ![...walkers].some(w => w.gone)) return null;
-  const role = ROLES[species]; if (!role) return null;
-  let slot = walkers.findIndex(w => w.gone);
-  const start = ringOf[pickLine(islands).id][Math.floor(Math.random()*RING_N)];
+window.__avatarWalkers = avatarWalkers;
+// 配件：每種一個實例化網格，顏色由每位島民自己決定
+const ACC = (() => {
+  const merge = BufferGeometryUtils.mergeGeometries;
+  const nz = g => { g.deleteAttribute('uv'); return g.index ? g.toNonIndexed() : g; };
+  const geos = {
+    wizard: merge([nz(new THREE.ConeGeometry(.5, 1, 16).scale(.17, .22, .17).translate(0, .115, 0)), nz(new THREE.CylinderGeometry(.5, .5, 1, 20).scale(.28, .012, .28))]),
+    crown: merge([nz(new THREE.CylinderGeometry(.5, .5, 1, 16, 1, true).scale(.15, .05, .15).translate(0, .025, 0)), ...[0,1,2,3,4].map(k => nz(new THREE.ConeGeometry(.5, 1, 6).scale(.035, .06, .035).translate(Math.cos(k*1.2566)*.075, .075, Math.sin(k*1.2566)*.075)))]),
+    flower: merge([...[0,1,2,3,4].map(k => nz(new THREE.SphereGeometry(.5, 8, 6).scale(.045, .025, .045).translate(Math.cos(k*1.2566)*.035, 0, Math.sin(k*1.2566)*.035))), nz(new THREE.SphereGeometry(.5, 8, 6).scale(.03, .03, .03).translate(0, .012, 0))]),
+    beret: merge([nz(new THREE.SphereGeometry(.5, 14, 8).scale(.22, .07, .21)), nz(new THREE.CylinderGeometry(.5, .5, 1, 6).scale(.015, .04, .015).translate(0, .04, 0))]),
+    bow: merge([nz(new THREE.ConeGeometry(.5, 1, 8).scale(.05, .06, .03).rotateZ(PI/2).translate(-.03, 0, 0)), nz(new THREE.ConeGeometry(.5, 1, 8).scale(.05, .06, .03).rotateZ(-PI/2).translate(.03, 0, 0)), nz(new THREE.SphereGeometry(.5, 8, 6).scale(.028, .028, .028))]),
+    cape: nz(new THREE.CylinderGeometry(.5, 1, 1, 16, 1, true, PI*.6, PI*.8).scale(.15, .2, .14)),
+    scarf: merge([nz(new THREE.TorusGeometry(.5, .14, 6, 18).rotateX(PI/2).scale(.15, .15, .15)), nz(new THREE.BoxGeometry(.035, .09, .012).translate(.03, -.05, .07))])
+  };
+  const out = {};
+  for (const [k, g] of Object.entries(geos)){
+    const im = new THREE.InstancedMesh(g, new THREE.MeshStandardMaterial({ color:0xffffff, roughness:.65, side: k === 'cape' ? THREE.DoubleSide : THREE.FrontSide }), MAXW + 2);
+    im.instanceMatrix.setUsage(THREE.DynamicDrawUsage); im.frustumCulled = false; im.castShadow = true;
+    for (let i = 0; i < MAXW + 2; i++){ im.setMatrixAt(i, ZERO); im.setColorAt(i, new THREE.Color('#ffffff')); }
+    scene.add(im); out[k] = im;
+  }
+  return out;
+})();
+const _AM = new THREE.Matrix4();
+function drawAccessories(w, i){
+  const c = w.custom;
+  for (const [k, im] of Object.entries(ACC)){
+    let on = false;
+    if (c && !w.gone && w.m.scaleMul > 0){
+      if (k === c.hat){
+        const lift = 0;
+        const pos = { wizard:[0, .41 + lift, -.005], crown:[0, .41 + lift, 0], flower:[.07, .4 + lift*.6, .03], beret:[.01, .415 + lift, -.01], bow:[.06, .405 + lift*.6, 0] }[k];
+        _AM.makeTranslation(...pos); if (k === 'beret') _AM.multiply(_m.makeRotationZ(-.25)); if (k === 'flower' || k === 'bow') _AM.multiply(_m.makeRotationZ(-.4));
+        im.setMatrixAt(i, _PW.multiplyMatrices(_WH, _AM)); on = true;
+      } else if (k === c.wear){
+        _AM.makeTranslation(0, k === 'cape' ? .17 : .265, k === 'cape' ? -.01 : 0);
+        im.setMatrixAt(i, _PW.multiplyMatrices(_W, _AM)); on = true;
+      }
+    }
+    if (!on) im.setMatrixAt(i, ZERO);
+    im.instanceMatrix.needsUpdate = true;
+  }
+}
+function paintAvatar(w){
+  const r = w.role, c = w.custom || {}, i = w.idx;
+  const col = (k2, j, cc) => cc && WI[k2].setColorAt(j, new THREE.Color(cc));
+  const bodyC = c.color || r.body, legC = c.color ? shade(c.color, -.15) : (r.legs || r.body), armC = c.color || r.arms || r.body;
+  col('body', i, bodyC); col('head', i, r.skin); col('hair', i, r.hair || r.skin);
+  col('leg', i*2, legC); col('leg', i*2 + 1, legC); col('arm', i*2, armC); col('arm', i*2 + 1, armC);
+  col('eye', i*2, r.eyes || '#211d1d'); col('eye', i*2 + 1, r.eyes || '#211d1d');
+  Object.values(WI).forEach(im => { if (im.instanceColor) im.instanceColor.needsUpdate = true; });
+  for (const [k, im] of Object.entries(ACC)){ im.setColorAt(i, new THREE.Color(k === c.hat ? (k === 'crown' ? '#f2c14a' : c.hatColor) : c.wearColor || '#ffffff')); im.instanceColor.needsUpdate = true; }
+}
+function makeAvatarWalker(av, key){
+  const role = ROLES[av.species]; if (!role) return null;
+  const slot = walkers.findIndex(w => w.gone);
+  if (slot < 0 && walkers.length >= MAXW) return null;
+  const homeList = av.home ? ringOf[av.home] : ringOf[pickLine(islands).id];
+  const start = homeList[Math.floor(Math.random()*RING_N)];
   const m = newMover([], .3); m.pos.copy(nodes[start].p);
   const plate = document.createElement('div'); plate.className = 'nameplate avatar' + (key === 'me' ? ' me' : '');
-  plate.textContent = name;
+  plate.textContent = av.name;
   const plateObj = new CSS2DObject(plate); plateObj.visible = false; scene.add(plateObj);
   const idx = slot >= 0 ? slot : walkers.length;
-  const w = { m, fl:null, role, cargo:null, forward:false, phase:Math.random(), wait:1, badge:null, plate, plateObj, idx, wander:true, avatar:true, name, key, node:start,
-    hx: roleMesh(species, 'headX'), bx: roleMesh(species, 'bodyX'), baseSpeed:.3 };
-  const col = (k2, j, c) => c && WI[k2].setColorAt(j, new THREE.Color(c));
-  col('body', idx, role.body); col('head', idx, role.skin); col('hair', idx, role.hair || role.skin);
-  col('leg', idx*2, role.legs || role.body); col('leg', idx*2 + 1, role.legs || role.body);
-  col('arm', idx*2, role.arms || role.body); col('arm', idx*2 + 1, role.arms || role.body);
-  col('eye', idx*2, role.eyes || '#211d1d'); col('eye', idx*2 + 1, role.eyes || '#211d1d');
-  Object.values(WI).forEach(im => { if (im.instanceColor) im.instanceColor.needsUpdate = true; });
+  const w = { m, fl:null, role, cargo:null, forward:false, phase:Math.random(), wait:1 + Math.random()*2, badge:null, plate, plateObj, idx, wander:true, avatar:true, name: av.name, key, node:start, custom: av,
+    hx: roleMesh(av.species, 'headX', av.hat !== 'none' ? 'bare' : ''), bx: roleMesh(av.species, 'bodyX'), baseSpeed:.3 };
   if (slot >= 0) walkers[slot] = w; else walkers.push(w);
+  paintAvatar(w);
   avatarWalkers.set(key, w);
   return w;
 }
@@ -6003,54 +6299,110 @@ function removeAvatar(key){
   const w = avatarWalkers.get(key); if (!w) return;
   w.gone = true; w.m.scaleMul = 0; w.plateObj.visible = false; scene.remove(w.plateObj);
   if (w.hx) w.hx.im.setMatrixAt(w.hx.slot, ZERO); if (w.bx) w.bx.im.setMatrixAt(w.bx.slot, ZERO);
+  for (const im of Object.values(ACC)) im.setMatrixAt(w.idx, ZERO);
   avatarWalkers.delete(key);
+}
+function upsertAvatar(key, av){
+  const old = avatarWalkers.get(key);
+  if (old && old.role === ROLES[av.species] && (old.custom.hat === 'none') === (av.hat === 'none')){
+    old.custom = av; old.name = av.name; old.plate.textContent = av.name; paintAvatar(old); return old;
+  }
+  if (old) removeAvatar(key);
+  return makeAvatarWalker(av, key);
 }
 function wanderTick(w, dt){
   if (w.gone) return;
   if (w.wait > 0){ w.wait -= dt; w.m.moving = false; if (w.wait <= 0) planWander(w); return; }
-  if (moveStep(w.m, dt)){ w.node = w.destNode; w.wait = 2 + Math.random()*3; if (Math.random() < .3) emote(w, pickLine(['note','heart','sparkle'])); }
+  if (moveStep(w.m, dt)){ w.node = w.destNode; w.wait = 2 + Math.random()*4; if (Math.random() < .3) emote(w, pickLine(['note','heart','sparkle'])); }
 }
 function planWander(w){
   let target;
   if (w.goal != null){ target = w.goal; w.goal = null; }
-  else { const n = nodes[w.node]; const sameIsl = Math.random() < .7; const list = ringOf[sameIsl ? n.isl : pickLine(islands).id]; target = list[Math.floor(Math.random()*list.length)]; }
+  else {
+    const home = w.custom && w.custom.home;
+    const islId = home && Math.random() < .75 ? home : (Math.random() < .6 ? nodes[w.node].isl : pickLine(islands).id);
+    const list = ringOf[islId]; target = list[Math.floor(Math.random()*list.length)];
+  }
   const legs = findPath(w.node, target);
   if (!legs){ w.wait = 2; return; }
   const p = w.m.pos.clone();
   Object.assign(w.m, newMover(legs, w.baseSpeed)); w.m.pos.copy(p); w.destNode = target;
 }
 function spawnMyAvatar(){
-  if (!myAvatar) return;
-  removeAvatar('me');
-  const w = makeAvatarWalker(myAvatar.species, myAvatar.name, 'me');
+  if (!myAvatar) return null;
+  const w = upsertAvatar('me', myAvatar);
   if (w){ emote(w, 'heart'); burst(w.m.pos.clone().setY(w.m.pos.y + .3), ['#ffe08a','#f7a8c0'], 40); }
   return w;
 }
+// 資料庫：永久的島民名冊（需要 Supabase，見 supabase-setup.sql）
+let myUid = null;
+const rowToAvatar = r => normAvatar({ species:r.species, name:r.name, color:r.color, hat:r.hat, hatColor:r.hat_color, wear:r.wear, wearColor:r.wear_color, home:r.home, motto:r.motto });
+function applyIslanderRow(r){
+  if (!r || !r.owner || r.owner === myUid) return;
+  const av = rowToAvatar(r); if (!av) return;
+  const persisted = [...avatarWalkers.keys()].filter(k => k.startsWith('p:'));
+  if (!avatarWalkers.has('p:' + r.owner) && persisted.length >= 20) return;
+  removeAvatar('r:' + r.owner);
+  upsertAvatar('p:' + r.owner, av);
+  if (typeof buildSide === 'function' && sideTab === 'res') buildSide();
+}
+async function loadIslanders(){
+  if (!sb) return;
+  try {
+    const { data, error } = await sb.from('islanders').select('*').order('updated_at', { ascending:false }).limit(20);
+    if (!error && data) data.forEach(applyIslanderRow);
+    sb.channel('islanders-live').on('postgres_changes', { event:'*', schema:'public', table:'islanders' }, p => applyIslanderRow(p.new)).subscribe();
+  } catch(e){}
+}
+async function saveIslander(av){
+  if (!sb || !myUid) return false;
+  try {
+    const { error } = await sb.from('islanders').upsert({ owner: myUid, name: av.name, species: av.species, color: av.color, hat: av.hat, hat_color: av.hatColor,
+      wear: av.wear, wear_color: av.wearColor, home: av.home || '', motto: av.motto || '' });
+    return !error;
+  } catch(e){ return false; }
+}
+// 編輯對話框
 const avDlg = $('avatarDlg');
+const swatches = (name, list, cur) => list.map(c => `<label class="sw2"><input type="radio" name="${name}" value="${c}" ${c === cur ? 'checked' : ''}><i style="${c ? `background:${c}` : ''}" class="${c ? '' : 'orig'}"></i></label>`).join('');
+const pills = (name, list, cur) => list.map(([v, zh, en]) => `<label class="pill"><input type="radio" name="${name}" value="${v}" ${v === cur ? 'checked' : ''}><span>${tr(zh, en)}</span></label>`).join('');
 function openAvatarDlg(){
-  $('avSpecies').innerHTML = SPECIES.map(sp => `<label><input type="radio" name="avsp" value="${sp}" ${(!myAvatar && sp === 'catmage') || (myAvatar && myAvatar.species === sp) ? 'checked' : ''}><span>${esc(tr(ROLES[sp].name, ROLES[sp].en))}</span></label>`).join('');
-  $('avName').value = myAvatar ? myAvatar.name : '';
+  const a = myAvatar || { species:'catmage', color:'', hat:'none', hatColor:'#6f5aa8', wear:'none', wearColor:'#db6a41', home:'', motto:'', name:'' };
+  $('avSpecies').innerHTML = SPECIES.map(sp => `<label><input type="radio" name="avsp" value="${sp}" ${a.species === sp ? 'checked' : ''}><span>${esc(tr(ROLES[sp].name, ROLES[sp].en))}</span></label>`).join('');
+  $('avColor').innerHTML = swatches('avcol', BODY_COLS, a.color);
+  $('avHat').innerHTML = pills('avhat', HATS, a.hat); $('avHatCol').innerHTML = swatches('avhatc', ACC_COLS, a.hatColor);
+  $('avWear').innerHTML = pills('avwear', WEARS, a.wear); $('avWearCol').innerHTML = swatches('avwearc', ACC_COLS, a.wearColor);
+  $('avHome').innerHTML = `<option value="">${tr('到處逛逛', 'Anywhere')}</option>` + islands.map(i => `<option value="${i.id}" ${a.home === i.id ? 'selected' : ''}>${pad2(i.no)} ${esc(tr(i.name, i.en))}</option>`).join('');
+  $('avName').value = a.name || ''; $('avMotto').value = a.motto || '';
+  $('avSync').textContent = sb ? tr('會同步到雲端，所有訪客都看得到你。', 'Synced: every visitor will see you.') : tr('目前只存在你的瀏覽器裡（網站接上資料庫後，其他訪客也看得到）。', 'Saved in this browser only.');
   avDlg.hidden = false; $('avName').focus();
 }
 avDlg.addEventListener('click', e => { if (e.target === avDlg || e.target.closest('[data-close]')) avDlg.hidden = true; });
-$('avForm').addEventListener('submit', e => {
+$('avForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const sp = (avDlg.querySelector('input[name=avsp]:checked') || {}).value, name = clean($('avName').value, 12);
-  if (!sp || !name) return;
-  myAvatar = { species: sp, name }; store.set('lanternfall-me', JSON.stringify(myAvatar));
+  const v = n => (avDlg.querySelector(`input[name=${n}]:checked`) || {}).value;
+  const av = normAvatar({ species: v('avsp'), name: $('avName').value, color: v('avcol') || '', hat: v('avhat'), hatColor: v('avhatc'), wear: v('avwear'), wearColor: v('avwearc'), home: $('avHome').value, motto: $('avMotto').value });
+  if (!av || !clean($('avName').value, 12)) return;
+  myAvatar = av; store.set('lanternfall-me', JSON.stringify(myAvatar));
   avDlg.hidden = true;
   const w = spawnMyAvatar();
   if (typeof trackMe === 'function') trackMe(true);
+  const synced = await saveIslander(av);
   if (w) openAvatarCard(w);
-  toast(tr(`歡迎成為島民，${name}！`, `Welcome to the isles, ${name}!`));
+  toast(synced ? tr(`${av.name} 已經住進群島，所有訪客都看得到你！`, `${av.name} now lives in the isles!`) : tr(`歡迎成為島民，${av.name}！`, `Welcome to the isles, ${av.name}!`));
+  if (sideTab === 'res') buildSide();
 });
 function openAvatarCard(w){
   setSelItem(null); setIslandUI(-1); selFlow = -1; updateFlowVis();
-  const mine = w.key === 'me';
-  openCard('avatar', w, `<div class="eyebrow">${mine ? tr('你的島民', 'YOUR ISLANDER') : tr('來訪的旅人', 'VISITING TRAVELLER')}</div>
-    <h2>${esc(w.name)}</h2><p class="lead">${esc(tr(w.role.name, w.role.en))}${mine ? tr('・在群島上自由散步，會跟其他居民一樣搭船、搭纜車、穿傳送門。', ' · wanders the isles, riding ferries and cable cars like everyone else.') : ''}</p>
+  const mine = w.key === 'me', c = w.custom || {};
+  const status = mine ? tr('你的島民', 'Your islander') : w.online ? tr('● 正在線上', '● Online now') : tr('住在群島上的旅人', 'Lives in the isles');
+  openCard('avatar', w, `<div class="eyebrow">${mine ? tr('你的島民', 'YOUR ISLANDER') : tr('群島居民', 'ISLANDER')}</div>
+    <h2>${esc(w.name)}</h2>
+    ${c.motto ? `<p class="wishtext" style="--lc:#c9b8ff">「${esc(c.motto)}」</p>` : ''}
+    <p class="lead">${esc(tr(w.role.name, w.role.en))}${c.home ? tr(`・最常待在${islName(c.home)}`, ` · usually on ${islName(c.home)}`) : ''}</p>
+    <div class="state"><span class="dot" style="${w.online || mine ? 'background:#43b36a' : ''}"></span><span>${status}</span></div>
     <div class="acts"><button class="act" data-act="avatar:hello:${w.key}">${svgIcon('heart', 18)}<span>${tr('打招呼', 'Say hello')}</span></button>
-    ${mine ? `<button class="act" data-act="avatar:chris:me">${svgIcon('camera', 18)}<span>${tr('去找 Chris', 'Find Chris')}</span></button><button class="act" data-act="avatar:edit:me">${svgIcon('user', 18)}<span>${tr('換造型', 'Change look')}</span></button>` : ''}</div>`, () => openAvatarCard(w));
+    ${mine ? `<button class="act" data-act="avatar:chris:me">${svgIcon('camera', 18)}<span>${tr('去找 Chris', 'Find Chris')}</span></button><button class="act" data-act="avatar:home:me">${svgIcon('home', 18)}<span>${tr('回最愛的島', 'Go home')}</span></button><button class="act spell" data-act="avatar:edit:me">${svgIcon('user', 18)}<span>${tr('編輯造型', 'Edit look')}</span></button><button class="act" data-act="avatar:leave:me">${svgIcon('close', 18)}<span>${tr('離開群島', 'Leave the isles')}</span></button>` : ''}</div>`, () => openAvatarCard(w));
   setFollow(w.m, w.name);
   const tgt = w.m.pos.clone().setY(w.m.pos.y + .25);
   flyTo(tgt.clone().add(new THREE.Vector3(1.4, 2, 2.8)), tgt);
@@ -6059,15 +6411,31 @@ function avatarAct(k, key){
   const w = avatarWalkers.get(key); if (!w) return;
   if (k === 'hello'){ w.act = { k:'wave', t:0, dur:1.6 }; emote(w, 'heart'); return tr(`${w.name}開心地揮手`, `${w.name} waves`); }
   if (k === 'chris'){ w.goal = nearestNodeTo(chris.m.pos); w.wait = .01; return tr(`${w.name}出發去找 Chris`, `${w.name} sets off to find Chris`); }
+  if (k === 'home'){ const h = w.custom.home || 'keep'; w.goal = ringAt(h, PI/2); w.wait = .01; return tr(`${w.name}往${islName(h)}出發`, `${w.name} heads to ${islName(h)}`); }
   if (k === 'edit'){ openAvatarDlg(); return ''; }
+  if (k === 'leave'){
+    if (!w._leaveArmed){ w._leaveArmed = true; setTimeout(() => { w._leaveArmed = false; }, 5000); return tr('確定要離開嗎？5 秒內再按一次「離開群島」確認。', 'Tap “Leave the isles” again within 5 s to confirm.'); }
+    removeAvatar('me'); myAvatar = null; store.set('lanternfall-me', 'null');
+    if (sb && myUid) sb.from('islanders').delete().eq('owner', myUid).then(() => {}, () => {});
+    closeCard(); clearSelection(); if (typeof trackMe === 'function') trackMe(true);
+    return tr('你的島民已經離開群島，隨時歡迎再回來。', 'Your islander has left. Come back any time.');
+  }
 }
 function syncRemoteAvatar(key, v){
+  if (v.uid && avatarWalkers.has('p:' + v.uid)){
+    const w = avatarWalkers.get('p:' + v.uid); w.online = true; w.plate.classList.add('online');
+    const goal = nearestNodeTo(v.tgt); if (w.lastGoal !== goal){ w.lastGoal = goal; w.goal = goal; if (w.wait <= 0 && !w.m.riding) w.wait = .01; }
+    return;
+  }
   if (!v.sp){ removeAvatar('r:' + key); return; }
   let w = avatarWalkers.get('r:' + key);
   if (w && (w.role !== ROLES[v.sp] || w.name !== v.name)){ removeAvatar('r:' + key); w = null; }
-  if (!w){ if ([...avatarWalkers.keys()].filter(k => k.startsWith('r:')).length >= 12) return; w = makeAvatarWalker(v.sp, v.name, 'r:' + key); if (!w) return; }
+  if (!w){ if ([...avatarWalkers.keys()].filter(k => k.startsWith('r:')).length >= 12) return; w = makeAvatarWalker(normAvatar({ species: v.sp, name: v.name }), 'r:' + key); if (!w) return; w.online = true; }
   const goal = nearestNodeTo(v.tgt);
   if (w.lastGoal !== goal){ w.lastGoal = goal; w.goal = goal; if (w.wait <= 0 && !w.m.riding) w.wait = .01; }
+}
+function markOffline(onlineUids){
+  for (const [k, w] of avatarWalkers) if (k.startsWith('p:')){ const on = onlineUids.has(k.slice(2)); w.online = on; w.plate.classList.toggle('online', on); }
 }
 
 // ---------- 每幀 ----------
@@ -6085,7 +6453,7 @@ $('btnBook').addEventListener('click', () => { renderBook(); bookEl.hidden = fal
 bookEl.addEventListener('click', e => {
   if (e.target === bookEl || e.target.closest('[data-close]')){ bookEl.hidden = true; return; }
   const g = e.target.closest('[data-game]');
-  if (g){ bookEl.hidden = true; ({ quote: gameQuote, stones: gameStones, hunt: gameFindCat })[g.dataset.game](); }
+  if (g){ bookEl.hidden = true; ({ potion: gamePotion, meteor: gameMeteor, feed: gameFeed, dive: gameDive, stones: gameStones, hunt: gameFindCat })[g.dataset.game](); }
 });
 $('bookReset').addEventListener('click', () => {
   if (!confirm(tr('確定要清除所有收集進度嗎？', 'Clear all collection progress?'))) return;
