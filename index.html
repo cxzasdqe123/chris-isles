@@ -375,7 +375,7 @@ body.is-online .ctx{top:66px}
 .mpop .tbtn[aria-pressed="true"]{background:#fcea8b;color:#2b3170}
 .mpop .tbtn[aria-pressed="true"] .i{color:#2b3170}
 .mpop .tbtn:focus-visible{outline:3px solid #fcea8b}
-.ctx{top:104px}
+.ctx{top:118px}
 /* 底部導覽 */
 .dock{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:8;display:flex;align-items:center;gap:4px;padding:6px;border-radius:22px;
   background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glass-line);box-shadow:var(--shadow)}
@@ -490,6 +490,33 @@ body.photo .mclock,body.photo .dock{display:none!important}
 .pill span{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--btn);box-shadow:inset 0 0 0 1px var(--line);font-size:13px;font-weight:700;cursor:pointer}
 .pill input:checked + span{background:#211d1d;color:#fff8f4}
 .nameplate.avatar.live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#43b36a;margin-right:5px;box-shadow:0 0 0 2px rgba(67,179,106,.3)}
+/* 島主模式、我的島民、預覽 */
+.locknote{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:rgba(252,234,139,.22);box-shadow:inset 0 0 0 1px rgba(226,181,74,.45);font-size:13.5px;line-height:1.6}
+.locknote .i,.locknote svg{color:#c99a2e;flex:none;margin-top:2px}
+.minefab{position:absolute;right:16px;bottom:96px;z-index:4;display:none;align-items:center;gap:8px;padding:10px 16px 10px 12px;border:0;border-radius:999px;cursor:pointer;
+  background:#db6a41;color:#fff8f4;font:800 13px "Noto Sans TC","PingFang TC",sans-serif;box-shadow:0 10px 24px rgba(219,106,65,.35)}
+.minefab[hidden]{display:none}
+.minefab .i{display:grid}
+.minefab:hover{background:#c25530}
+.minefab:focus-visible{outline:3px solid #211d1d;outline-offset:2px}
+body.photo .minefab{display:none!important}
+.avprevbox{position:relative;justify-self:center;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle at 50% 40%,#fff8f4 0,#f6e9dc 55%,#e9d7c4 100%);box-shadow:inset 0 -10px 24px rgba(120,90,70,.18)}
+.avprevbox canvas{width:220px;height:220px;display:block;border-radius:50%}
+.avprevbox .pvtag{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);padding:3px 10px;border-radius:999px;background:#211d1d;color:#fcea8b;font:700 10px ui-monospace,Menlo,monospace;letter-spacing:1.5px}
+@media (max-width:800px){
+  .minefab{bottom:80px;right:10px;padding:9px 14px 9px 10px}
+  .minefab:not([hidden]){display:flex}
+  .avprevbox,.avprevbox canvas{width:170px;height:170px}
+}
+/* 正臉小視窗 */
+.portrait{position:absolute;top:12px;right:58px;width:84px;height:84px;border-radius:50%;overflow:hidden;z-index:2;
+  background:radial-gradient(circle at 50% 40%,#fff8f4 0,#f6e9dc 60%,#e9d7c4 100%);box-shadow:0 6px 16px rgba(33,29,29,.18),0 0 0 3px var(--panel),0 0 0 5px #fcea8b}
+.portrait[hidden]{display:none}
+.portrait canvas{width:100%;height:100%;display:block}
+.card.has-portrait #cardBody > .eyebrow,.card.has-portrait #cardBody > h2,.card.has-portrait #cardBody > .title{padding-right:96px;min-height:0}
+.card.has-portrait #cardBody > .lead:first-of-type{margin-top:22px}
+@media (max-width:800px){ .portrait{width:72px;height:72px;top:16px;right:54px} .card.has-portrait #cardBody > .eyebrow,.card.has-portrait #cardBody > h2,.card.has-portrait #cardBody > .title{padding-right:84px} }
 /* 名牌 */
 .nameplate{pointer-events:none;white-space:nowrap;font:700 11px "Noto Sans TC","PingFang TC",sans-serif;padding:3px 8px;border-radius:999px;
   background:#fff8f4;color:#211d1d;box-shadow:0 2px 8px rgba(74,42,20,.18);transform:translateY(-6px)}
@@ -677,6 +704,7 @@ body.photo .legend,body.photo .hint,body.photo .labels,body.photo .online{displa
       <div class="eyebrow">BECOME AN ISLANDER</div>
       <h2 id="avTitle" data-en="Become an islander">成為島民</h2>
       <p class="sub" id="avSync"></p>
+      <div class="avprevbox"><canvas id="avPrev" width="220" height="220" aria-label="島民預覽"></canvas><span class="pvtag" data-en="Live preview">即時預覽</span></div>
       <h3 data-en="Species">種族</h3><div class="species" id="avSpecies"></div>
       <h3 data-en="Body colour">身體顏色</h3><div class="swrow" id="avColor"></div>
       <h3 data-en="Hat">帽子</h3><div class="pillrow" id="avHat"></div><div class="swrow" id="avHatCol"></div>
@@ -730,6 +758,7 @@ body.photo .legend,body.photo .hint,body.photo .labels,body.photo .online{displa
   </div>
 
   <!-- 底部導覽：只留最常用的功能，顯示開關收進「顯示」 -->
+  <button class="minefab" id="mineFab" hidden><span class="i" data-icon="user"></span><span data-en="My islander">我的島民</span></button>
   <nav class="dock" aria-label="主要功能">
     <button class="dk m-only" id="mHome"><span class="i" data-icon="home"></span><span data-en="Map">全景</span></button>
     <button class="dk m-only" id="mList" aria-pressed="false"><span class="i" data-icon="list"></span><span data-en="List">清單</span></button>
@@ -805,6 +834,7 @@ body.photo .legend,body.photo .hint,body.photo .labels,body.photo .online{displa
     <div class="grab" aria-hidden="true"></div>
     <button class="btn x" id="cardClose" aria-label="關閉卡片"><span class="i" data-icon="close"></span></button>
     <button class="btn x bk" id="cardBack" hidden aria-label="上一張卡片"><span class="i" data-icon="back"></span></button>
+    <div class="portrait" id="portrait" hidden aria-hidden="true"><canvas id="portraitCv" width="220" height="220"></canvas></div>
     <div id="cardBody"></div>
   </section>
 
@@ -4320,7 +4350,7 @@ function updateHana(dt, t){
       else if (H.island !== 'academy'){ hanaGo('academy', ringAt('academy', PI/2 + (hsr() - .5)*2)); }
       else if (r < .62){ hanaGo('academy', ringAt('academy', hsr()*PI*2)); }
       else if (r < .8){ H.state = 'teach'; H.timer = 4.5; emote(H, 'sparkle'); if (simTime - (H.lastLog || -99) > 50){ H.lastLog = simTime; logEvent('chris', tr('Hana 院長揮動魔杖，開始一堂飄浮咒語課', 'Dean Hana starts a levitation lesson')); } }
-      else { H.state = 'pet'; H.timer = 3.5; cat.act = 'purr'; cat.actT = 3.5; emote(cat, 'heart'); }
+      else { H.state = 'pet'; H.timer = 4.5; cat.act = 'purr'; cat.actT = 4.5; }
     }
   } else if (H.state === 'walk'){
     if (moveStep(m, dt)){
@@ -4345,7 +4375,14 @@ function updateHana(dt, t){
   H.body.position.y = walking ? Math.abs(Math.sin(ph))*.012 : 0;
   H.body.rotation.set(0, 0, 0);
   if (H.state === 'teach'){ aR.rotation.set(-2.4 + Math.sin(t*6)*.3, 0, .3); aL.rotation.set(-.6, 0, -.4); H.head.rotation.x = -.2; }
-  if (H.state === 'pet'){ H.body.rotation.x = .35; H.body.position.y = -.03; aL.rotation.set(-1.2, 0, .3); aR.rotation.set(-1.1, 0, -.2); }
+  if (H.state === 'pet'){
+    // 彎腰、伸出右手在布丁頭上來回撫摸
+    const near = cat.pos.distanceTo(m.pos) < .5;
+    H.body.rotation.x = near ? .5 : .2; H.body.position.y = near ? -.06 : -.02;
+    aR.rotation.set(near ? -.95 + Math.sin(t*5)*.18 : -.6, 0, near ? -.05 + Math.sin(t*5)*.12 : 0);
+    aL.rotation.set(-.35, 0, -.25); H.head.rotation.x = .35;
+    if (near && Math.random() < dt*1.2) emote(cat, 'heart');
+  }
   if (H.state === 'love'){ aL.rotation.set(-2.2, 0, .5); aR.rotation.set(-2.2, 0, -.5); H.head.rotation.z = .2; H.body.position.y = Math.abs(Math.sin(t*5))*.02; }
   H.capeG.rotation.x = walking ? .1 + Math.abs(Math.sin(ph))*.08 : .03;
   const big = THREE.MathUtils.clamp(camera.position.distanceTo(m.pos)/20, 1, 1.45) * m.scaleMul * m.rideScale * 1.02;
@@ -4368,17 +4405,25 @@ function updateCat(dt, t){
   else {
     // 跟在 Hana 後方稍微偏右；用遲滯區間避免原地抖動
     let tgt;
-    if (K.act === 'chase'){ const a = t*2.2; tgt = _hv.set(Math.cos(a)*.5, 0, Math.sin(a)*.5).add(H.m.pos); }
+    const petting = H.state === 'pet';
+    if (petting){
+      const hb = THREE.MathUtils.clamp(camera.position.distanceTo(H.m.pos)/20, 1, 1.45);
+      tgt = _hv.set(Math.sin(H.m.yaw)*.25*hb, 0, Math.cos(H.m.yaw)*.25*hb).add(H.m.pos);
+    }
+    else if (K.act === 'chase'){ const a = t*2.2; tgt = _hv.set(Math.cos(a)*.5, 0, Math.sin(a)*.5).add(H.m.pos); }
     else tgt = _hv.set(.16, 0, -.4).applyAxisAngle(UPV, H.m.yaw).add(H.m.pos);
     const dx = tgt.x - K.pos.x, dz = tgt.z - K.pos.z, d = Math.hypot(dx, dz);
     if (d > 3) K.pos.set(tgt.x, H.m.pos.y, tgt.z);
-    if (!K.moving && d > .3) K.moving = true;
+    if (!K.moving && d > (petting ? .05 : .3)) K.moving = true;
+    if (petting && d < .03) K.moving = false;
     if (K.moving && d < .06) K.moving = false;
     if (K.moving){
       speed = Math.min(K.act === 'chase' ? 1.3 : 1.05, d*2.6 + .12);
       const step = Math.min(d, speed*dt);
       K.pos.x += dx/d*step; K.pos.z += dz/d*step;
       K.yaw = lerpAng(K.yaw, Math.atan2(dx, dz), Math.min(1, dt*8));
+    } else if (petting){
+      K.yaw = lerpAng(K.yaw, Math.atan2(H.m.pos.x - K.pos.x, H.m.pos.z - K.pos.z), Math.min(1, dt*8));
     } else if (K.act !== 'roll'){
       K.yaw = lerpAng(K.yaw, Math.atan2(H.m.pos.x - K.pos.x, H.m.pos.z - K.pos.z), Math.min(1, dt*3));
     }
@@ -4392,7 +4437,7 @@ function updateCat(dt, t){
   K.body.rotation.set(0, 0, walk*Math.sin(ph)*.06);
   K.tail.rotation.set(Math.sin(t*2)*.12, Math.sin(t*1.6)*.35, 0);
   K.capeG.rotation.x = .08 + walk*Math.abs(Math.sin(ph))*.18 + Math.sin(t*1.3)*.02;
-  K.head.rotation.set(K.act === 'purr' ? -.25 : 0, K.moving ? 0 : Math.sin(t*.7)*.25, K.act === 'purr' ? Math.sin(t*4)*.18 : 0);
+  K.head.rotation.set(K.act === 'purr' ? (H.state === 'pet' ? -.45 : -.25) : 0, K.moving ? 0 : Math.sin(t*.7)*.25, K.act === 'purr' ? Math.sin(t*4)*.18 : 0);
   if (K.act === 'purr'){ K.arms[0].rotation.set(-1.4, 0, .3); K.arms[1].rotation.set(-1.4, 0, -.3); }
   let spin = 0, hop = 0;
   if (K.act === 'roll'){ const k = 1 - Math.max(0, K.actT)/2.5; spin = k*PI*4; hop = Math.abs(Math.sin(k*PI*4))*.12; K.arms[0].rotation.set(-2.6, 0, -.4); K.arms[1].rotation.set(-2.6, 0, .4); }
@@ -5239,7 +5284,8 @@ function charCardHTML(id){
   return `<div class="eyebrow">${esc(tr(c.sub, c.subEn))}</div><div class="title"><span class="tic">${svgIcon(c.icon, 22)}</span><h2>${esc(tr(c.name, c.en))}</h2></div>
     <p class="lead">${lead}</p>${stats}
     ${st ? `<div class="state"><span class="dot"></span><span id="cState">${st}</span></div>` : ''}
-    ${actButtons(id)}${SPELLS[id] ? spellButtons(id) : ''}
+    ${id === 'chris' && !isKeeper ? `<div class="locknote">${svgIcon('star', 16)}<span>${tr('只有島主本人可以指揮 Chris。你可以按「跟隨」，看看他今天在群島上做什麼。', 'Only the isle keeper can direct Chris. Follow him to see what he is up to.')}</span></div>` : actButtons(id) + (SPELLS[id] ? spellButtons(id) : '')}
+    ${id === 'chris' && isKeeper ? `<div class="acts"><button class="act" data-act="keeper:off:me">${svgIcon('close', 18)}<span>${tr('關閉這台裝置的島主模式', 'Turn off keeper mode here')}</span></button></div>` : ''}
     <button class="btn row follow" data-followchar="${id}" aria-pressed="${followTgt && followTgt.charId === id}">${svgIcon('follow', 16)}<span>${tr('鏡頭跟著', 'Follow')}</span></button>`;
 }
 function openChar(id){
@@ -5255,6 +5301,8 @@ function openKeeper(){ openChar('chris'); }
 function closeKeeper(){ keeperEl.hidden = true; }
 function runAct(spec){
   const [kind, k, ref] = spec.split(':'); let msg = '';
+  if ((kind === 'chris' || (kind === 'spell' && k === 'chris')) && !isKeeper){ toast(tr('只有島主本人可以指揮 Chris', 'Only the isle keeper can direct Chris')); return; }
+  if (kind === 'keeper'){ toast(leaveKeeper()); return; }
   Sound.sfx(kind === 'spell' ? 'spell' : 'chime');
   if (kind === 'isl'){ const m = islAct(k, ref); if (m) toast(m); return; }
   if (kind === 'spell'){ const m = castSpell(k, ref); if (m) toast(m); return; }
@@ -5264,7 +5312,7 @@ function runAct(spec){
   else if (kind === 'hana'){
     if (k === 'teach'){ if (hana.m.riding) return toast(tr('Hana 正在搭纜車', 'Hana is riding')); hana.node = nearestNodeTo(hana.m.pos); hana.island = nodes[hana.node].isl; hana.state = 'teach'; hana.timer = 5; emote(hana, 'sparkle'); msg = tr('Hana 開始上課，學生們的書都飄起來了', 'Hana begins a lesson'); }
     if (k === 'seek'){ msg = hanaSeekChris() ? tr('Hana 出發去找 Chris', 'Hana sets off to find Chris') : tr('Hana 正在搭乘，等一下', 'Hana is riding, try again soon'); hana.seekTries = 0; }
-    if (k === 'pet'){ if (hana.m.riding) return toast(tr('Hana 正在搭纜車', 'Hana is riding')); hana.node = nearestNodeTo(hana.m.pos); hana.island = nodes[hana.node].isl; hana.state = 'pet'; hana.timer = 3.5; cat.act = 'purr'; cat.actT = 3.5; emote(cat, 'heart'); msg = tr('布丁舒服地呼嚕呼嚕', 'Pudding purrs happily'); }
+    if (k === 'pet'){ if (hana.m.riding) return toast(tr('Hana 正在搭纜車', 'Hana is riding')); hana.node = nearestNodeTo(hana.m.pos); hana.island = nodes[hana.node].isl; hana.state = 'pet'; hana.timer = 4.5; cat.act = 'purr'; cat.actT = 4.5; msg = tr('Hana 彎下腰摸摸布丁的頭，布丁舒服地呼嚕呼嚕', 'Hana strokes Pudding’s head; Pudding purrs'); }
     if (k === 'home'){ msg = hanaGo('academy', ringAt('academy', PI/2)) ? tr('Hana 回魔法學院', 'Hana heads back to the academy') : tr('Hana 正在搭乘，等一下', 'Hana is riding, try again soon'); }
   }
   else if (kind === 'cat'){ cat.act = k; cat.actT = k === 'chase' ? 5 : k === 'roll' ? 2.5 : 3.5; emote(cat, k === 'purr' ? 'heart' : k === 'chase' ? 'sparkle' : 'note'); msg = { purr:tr('布丁蹭了蹭 Hana', 'Pudding nuzzles Hana'), chase:tr('布丁追著光點跑來跑去', 'Pudding chases the sparkles'), roll:tr('布丁原地轉了好幾圈，斗篷飛了起來', 'Pudding twirls, cape flying') }[k]; }
@@ -6218,6 +6266,26 @@ function catFound(){
   toast(tr('找到了！布丁開心地蹭了蹭你的手。', 'Found it! Pudding nuzzles your hand.'));
 }
 
+// ---------- 島主模式：只有島主的裝置可以指揮 Chris ----------
+// 島主連結的金鑰只存雜湊值；原文只在島主自己手上。
+const KEEPER_HASH = '1fbe946fa72659018227be5c10fbf00713494f45ae755eed886be8812a54c6b8';
+let isKeeper = false;
+async function sha256hex(t){ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
+async function checkKeeper(){
+  try {
+    const h = location.hash.slice(1);
+    if (h.startsWith('keeper-') && await sha256hex(h) === KEEPER_HASH){
+      store.set('lf-keeper', h); history.replaceState(null, '', location.pathname + location.search);
+      setTimeout(() => toast(tr('島主模式已啟用：這台裝置可以指揮 Chris 了', 'Keeper mode on: this device can direct Chris')), 1500);
+    }
+    const k = store.get('lf-keeper');
+    isKeeper = !!k && await sha256hex(k) === KEEPER_HASH;
+  } catch(e){ isKeeper = false; }
+  document.body.classList.toggle('keeper', isKeeper);
+  if (cardKind === 'char' && cardRef === 'chris') openChar('chris');
+}
+function leaveKeeper(){ store.set('lf-keeper', ''); isKeeper = false; document.body.classList.remove('keeper'); openChar('chris'); return tr('已關閉島主模式，這台裝置不再能指揮 Chris', 'Keeper mode off'); }
+
 // ---------- 成為島民：可自訂造型、永久留在群島上 ----------
 const SPECIES = ['catmage', 'ghost', 'shroom', 'owl', 'dragonling', 'pumpkin', 'goblin', 'mermaid'];
 const BODY_COLS = ['', '#f7a8c0', '#7fe0d4', '#ffd27a', '#c9b8ff', '#8db86f', '#6f7fb5', '#f4efe8', '#3a3346'];
@@ -6322,7 +6390,7 @@ function upsertAvatar(key, av){
   return makeAvatarWalker(av, key);
 }
 function wanderTick(w, dt){
-  if (w.gone) return;
+  if (w.gone || w.preview) return;
   if (w.wait > 0){ w.wait -= dt; w.m.moving = false; if (w.wait <= 0) planWander(w); return; }
   if (moveStep(w.m, dt)){ w.node = w.destNode; w.wait = 2 + Math.random()*4; if (Math.random() < .3) emote(w, pickLine(['note','heart','sparkle'])); }
 }
@@ -6339,7 +6407,15 @@ function planWander(w){
   const p = w.m.pos.clone();
   Object.assign(w.m, newMover(legs, w.baseSpeed)); w.m.pos.copy(p); w.destNode = target;
 }
+function syncMineUI(){
+  const has = !!myAvatar;
+  $('mineFab').hidden = !has;
+  const lab = $('btnAvatar').querySelector('span:last-child'); if (lab) lab.textContent = has ? tr('我的島民', 'My islander') : tr('成為島民', 'Join');
+  const tile = document.querySelector('.mtile[data-proxy="btnAvatar"] span:last-child'); if (tile) tile.textContent = has ? tr('我的島民', 'My islander') : tr('成為島民', 'Join the isles');
+}
+function lockMine(){ const w = avatarWalkers.get('me'); if (w) openAvatarCard(w); else openAvatarDlg(); }
 function spawnMyAvatar(){
+  syncMineUI();
   if (!myAvatar) return null;
   const w = upsertAvatar('me', myAvatar);
   if (w){ emote(w, 'heart'); burst(w.m.pos.clone().setY(w.m.pos.y + .3), ['#ffe08a','#f7a8c0'], 40); }
@@ -6373,8 +6449,87 @@ async function saveIslander(av){
     return !error;
   } catch(e){ return false; }
 }
-// 編輯對話框
+// 編輯對話框（含即時 3D 預覽）
 const avDlg = $('avatarDlg');
+const PREV_P = new THREE.Vector3(center.x, 40, center.z - 120);
+const prevCam = new THREE.PerspectiveCamera(30, 1, .05, 60);
+const PV = 220;
+let prevRT = null, prevBuf = null, prevOn = false, prevT = 0;
+const prevCv = $('avPrev'), prevCtx = prevCv.getContext('2d');
+const prevOff = document.createElement('canvas'); prevOff.width = prevOff.height = PV; const prevOffCtx = prevOff.getContext('2d');
+function formAvatar(){
+  const v = n => (avDlg.querySelector(`input[name=${n}]:checked`) || {}).value;
+  return normAvatar({ species: v('avsp'), name: $('avName').value || tr('預覽', 'Preview'), color: v('avcol') || '', hat: v('avhat'), hatColor: v('avhatc'), wear: v('avwear'), wearColor: v('avwearc'), home: '', motto: '' });
+}
+function updatePreview(){
+  if (!prevOn) return;
+  const av = formAvatar(); if (!av) return;
+  const w = upsertAvatar('preview', av);
+  if (w){ w.preview = true; w.plateObj.visible = false; w.m.pos.copy(PREV_P); }
+}
+function ensureRT(){ if (!prevRT){ prevRT = new THREE.WebGLRenderTarget(PV, PV); prevRT.texture.colorSpace = THREE.SRGBColorSpace; prevBuf = new Uint8Array(PV*PV*4); } }
+// 把任一台鏡頭拍到的畫面畫進一個 2D canvas（預覽與正臉小視窗共用）
+function rtSnap(cam, ctx2d){
+  ensureRT();
+  const oldA = renderer.getClearAlpha(); renderer.getClearColor(_pcc);
+  renderer.setRenderTarget(prevRT); renderer.setClearColor(0x000000, 0); renderer.clear();
+  renderer.render(scene, cam);
+  renderer.readRenderTargetPixels(prevRT, 0, 0, PV, PV, prevBuf);
+  renderer.setRenderTarget(null); renderer.setClearColor(_pcc, oldA);
+  try {
+    const img = prevOffCtx.createImageData(PV, PV); img.data.set(prevBuf); prevOffCtx.putImageData(img, 0, 0);
+    ctx2d.clearRect(0, 0, PV, PV); ctx2d.save(); ctx2d.scale(1, -1); ctx2d.drawImage(prevOff, 0, -PV); ctx2d.restore();
+  } catch(e){}
+}
+// 正臉小視窗：一台永遠站在角色正前方的鏡頭
+const faceCam = new THREE.PerspectiveCamera(30, 1, .05, 12);
+const portraitEl = $('portrait'), portraitCtx = $('portraitCv').getContext('2d');
+let portraitAcc = 0;
+const _fp = new THREE.Vector3(), _fl = new THREE.Vector3();
+function portraitTarget(){
+  if (cardEl.hidden) return null;
+  const big = p => THREE.MathUtils.clamp(camera.position.distanceTo(p)/20, 1, 1.45);
+  if (cardKind === 'char'){
+    if (cardRef === 'chris') return { pos: chris.m.pos, yaw: chris.m.yaw, h: .42, d: 1.35, s: big(chris.m.pos) };
+    if (cardRef === 'hana') return { pos: hana.m.pos, yaw: hana.m.yaw, h: .43, d: 1.2, s: big(hana.m.pos)*1.02 };
+    if (cardRef === 'cat') return { pos: cat.pos, yaw: cat.yaw, h: .3, d: .8, s: big(cat.pos)*.8 };
+    return null;
+  }
+  if (cardKind === 'walker' || cardKind === 'avatar'){ const w = cardRef; if (!w || w.gone) return null; return { pos: w.m.pos, yaw: w.m.yaw, h: .3, d: 1.05, s: big(w.m.pos) }; }
+  if (cardKind === 'guard'){ const G = cardRef; return G ? { pos: G.g.position, yaw: G.yaw, h: .47, d: 1.05, s: G.g.scale.x } : null; }
+  return null;
+}
+function portraitTick(dt){
+  const T = portraitTarget();
+  portraitEl.hidden = !T; cardEl.classList.toggle('has-portrait', !!T);
+  if (!T) return;
+  portraitAcc += dt; if (portraitAcc < 1/15) return; portraitAcc = 0;
+  const hy = T.pos.y + T.h*T.s;
+  _fl.set(T.pos.x, hy, T.pos.z);
+  _fp.set(T.pos.x + Math.sin(T.yaw)*T.d*T.s, hy + .02*T.s, T.pos.z + Math.cos(T.yaw)*T.d*T.s);
+  faceCam.position.copy(_fp); faceCam.lookAt(_fl);
+  // 近裁切面推到角色前方一點，擋在中間的路燈、樹不會遮住臉
+  faceCam.near = Math.max(.05, (T.d - .24)*T.s); faceCam.updateProjectionMatrix();
+  rtSnap(faceCam, portraitCtx);
+}
+function previewStart(){
+  ensureRT();
+  prevOn = true; prevT = 0; updatePreview();
+}
+function previewStop(){ prevOn = false; removeAvatar('preview'); }
+const _pcc = new THREE.Color();
+function previewRender(dt){
+  if (!prevOn) return;
+  const w = avatarWalkers.get('preview'); if (!w) return;
+  prevT += dt;
+  w.m.pos.copy(PREV_P); w.m.yaw += dt*.7;
+  const cyc = prevT % 6; w.m.moving = cyc < 3;
+  if (cyc > 4 && cyc < 4 + dt*1.5 && !w.act) w.act = { k:'wave', t:0, dur:1.4 };
+  prevCam.position.set(PREV_P.x, PREV_P.y + .72, PREV_P.z + 2.45); prevCam.lookAt(PREV_P.x, PREV_P.y + .4, PREV_P.z);
+  rtSnap(prevCam, prevCtx);
+}
+avDlg.addEventListener('input', updatePreview); avDlg.addEventListener('change', updatePreview);
+new MutationObserver(() => { if (avDlg.hidden) previewStop(); }).observe(avDlg, { attributes:true, attributeFilter:['hidden'] });
 const swatches = (name, list, cur) => list.map(c => `<label class="sw2"><input type="radio" name="${name}" value="${c}" ${c === cur ? 'checked' : ''}><i style="${c ? `background:${c}` : ''}" class="${c ? '' : 'orig'}"></i></label>`).join('');
 const pills = (name, list, cur) => list.map(([v, zh, en]) => `<label class="pill"><input type="radio" name="${name}" value="${v}" ${v === cur ? 'checked' : ''}><span>${tr(zh, en)}</span></label>`).join('');
 function openAvatarDlg(){
@@ -6386,7 +6541,7 @@ function openAvatarDlg(){
   $('avHome').innerHTML = `<option value="">${tr('到處逛逛', 'Anywhere')}</option>` + islands.map(i => `<option value="${i.id}" ${a.home === i.id ? 'selected' : ''}>${pad2(i.no)} ${esc(tr(i.name, i.en))}</option>`).join('');
   $('avName').value = a.name || ''; $('avMotto').value = a.motto || '';
   $('avSync').textContent = sb ? tr('會同步到雲端，所有訪客都看得到你。', 'Synced: every visitor will see you.') : tr('目前只存在你的瀏覽器裡（網站接上資料庫後，其他訪客也看得到）。', 'Saved in this browser only.');
-  avDlg.hidden = false; $('avName').focus();
+  avDlg.hidden = false; previewStart(); $('avName').focus();
 }
 avDlg.addEventListener('click', e => { if (e.target === avDlg || e.target.closest('[data-close]')) avDlg.hidden = true; });
 $('avForm').addEventListener('submit', async e => {
@@ -6426,7 +6581,7 @@ function avatarAct(k, key){
   if (k === 'edit'){ openAvatarDlg(); return ''; }
   if (k === 'leave'){
     if (!w._leaveArmed){ w._leaveArmed = true; setTimeout(() => { w._leaveArmed = false; }, 5000); return tr('確定要離開嗎？5 秒內再按一次「離開群島」確認。', 'Tap “Leave the isles” again within 5 s to confirm.'); }
-    removeAvatar('me'); myAvatar = null; store.set('lanternfall-me', 'null');
+    removeAvatar('me'); myAvatar = null; store.set('lanternfall-me', 'null'); syncMineUI();
     if (sb && myUid) sb.from('islanders').delete().eq('owner', myUid).then(() => {}, () => {});
     closeCard(); clearSelection(); if (typeof trackMe === 'function') trackMe(true);
     return tr('你的島民已經離開群島，隨時歡迎再回來。', 'Your islander has left. Come back any time.');
@@ -6452,6 +6607,8 @@ function markOffline(onlineUids){
 // ---------- 每幀 ----------
 function stage6Tick(dt, t){
   weatherTick(dt, t); festTick(dt, t); shardTick(dt, t); catHuntTick();
+  previewRender(dt);
+  portraitTick(dt);
 }
 // 介面接線
 $('btnWeather').addEventListener('click', () => {
@@ -6471,7 +6628,9 @@ $('bookReset').addEventListener('click', () => {
   if (!confirm(tr('確定要清除所有收集進度嗎？', 'Clear all collection progress?'))) return;
   found.clear(); store.set('lanternfall-shards', '[]'); finaleStar.g.visible = false; SHARDS.forEach(S => S.announced = false); renderBook();
 });
-$('btnAvatar').addEventListener('click', () => { const w = avatarWalkers.get('me'); if (w) openAvatarCard(w); else openAvatarDlg(); });
+$('btnAvatar').addEventListener('click', lockMine);
+$('mineFab').addEventListener('click', lockMine);
+checkKeeper();
 addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   for (const el of [gameEl, bookEl, avDlg]) if (!el.hidden){ if (el === gameEl) closeGame(); else el.hidden = true; e.stopImmediatePropagation(); return; }
