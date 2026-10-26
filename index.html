@@ -6281,10 +6281,10 @@ async function checkKeeper(){
     const k = store.get('lf-keeper');
     isKeeper = !!k && await sha256hex(k) === KEEPER_HASH;
   } catch(e){ isKeeper = false; }
-  document.body.classList.toggle('keeper', isKeeper);
+  document.body.classList.toggle('is-keeper', isKeeper);
   if (cardKind === 'char' && cardRef === 'chris') openChar('chris');
 }
-function leaveKeeper(){ store.set('lf-keeper', ''); isKeeper = false; document.body.classList.remove('keeper'); openChar('chris'); return tr('已關閉島主模式，這台裝置不再能指揮 Chris', 'Keeper mode off'); }
+function leaveKeeper(){ store.set('lf-keeper', ''); isKeeper = false; document.body.classList.remove('is-keeper'); openChar('chris'); return tr('已關閉島主模式，這台裝置不再能指揮 Chris', 'Keeper mode off'); }
 
 // ---------- 成為島民：可自訂造型、永久留在群島上 ----------
 const SPECIES = ['catmage', 'ghost', 'shroom', 'owl', 'dragonling', 'pumpkin', 'goblin', 'mermaid'];
